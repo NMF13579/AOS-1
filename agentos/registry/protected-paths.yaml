@@ -1,0 +1,13 @@
+schema_version: 1
+artifact_type: registry_skeleton
+status: skeleton
+implementation_status: not_implemented
+runtime_authority: false
+source_of_truth: false
+blocks_execution: true
+created_for: A4.0-GR
+items: []
+boundary:
+  skeleton_registry_is_not_runtime_authority: true
+  registry_presence_is_not_validation_readiness: true
+  empty_registry_is_not_permission: true

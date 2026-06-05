@@ -1,0 +1,14 @@
+.agentos/
+
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*secret*
+*token*
+
+__pycache__/
+*.pyc
+.DS_Store

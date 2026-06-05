@@ -1,0 +1,61 @@
+schema_version: 1
+artifact_type: template_export_manifest
+status: skeleton
+implementation_status: not_implemented
+runtime_authority: false
+source_of_truth: false
+created_for: A4.0-GR
+
+distribution_modes:
+  github_use_template:
+    supported: true
+    implementation_status: planned
+    user_path: "Use this template -> Create a new repository"
+
+included_paths:
+  - README.md
+  - llms.txt
+  - .gitignore
+  - EMERGENCY.md
+  - agentos/**
+
+excluded_paths:
+  - .agentos/**
+  - agentos/generated/*.json
+  - agentos/audit/events.jsonl
+  - agentos/state/locks/runtime-locks.yaml
+  - agentos/state/tasks/*.yaml
+  - agentos/state/runs/*.yaml
+  - agentos/state/snapshots/*.yaml
+  - agentos/state/approvals/*.yaml
+  - agentos/approvals/human-checkpoints/*.md
+  - development-reports/**
+  - old-milestones/**
+  - experimental/**
+  - drafts/**
+  - tmp/**
+  - .env
+  - "*.pem"
+  - "*.key"
+  - "*secret*"
+  - "*token*"
+
+required_template_files:
+  - README.md
+  - llms.txt
+  - .gitignore
+  - EMERGENCY.md
+  - agentos/README.md
+  - agentos/agentos.py
+  - agentos/agentos.yaml
+  - agentos/architecture/invariants.md
+  - agentos/contracts/runtime-contract.md
+
+safety:
+  template_export_is_not_runtime_readiness: true
+  template_export_is_not_approval: true
+  template_export_is_not_execution_permission: true
+  project_specific_state_must_not_be_exported: true
+  approvals_must_not_be_exported: true
+  cache_must_not_be_exported: true
+  secrets_must_not_be_exported: true

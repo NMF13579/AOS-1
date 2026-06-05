@@ -1,0 +1,409 @@
+agentos:
+  architecture_line: A
+  architecture_version: "4.0-GR"
+  package_version: "0.0.0-skeleton"
+  schema_version: 1
+  status: skeleton
+  architecture_status: A4_0_GR_SKELETON_DEFINED_FOR_IMPLEMENTATION_PLANNING
+  materialization_allowed: true
+  operational_readiness_claimed: false
+  runtime_ready: false
+  execution_ready: false
+  validation_ready: false
+
+install_model:
+  mode: single_folder
+  root_folder: agentos/
+  local_runtime: .agentos/
+  bootstrap_file: llms.txt
+  user_entrypoint: agentos/agentos.py
+  project_code_boundary: outside_agentos_folder
+
+authority:
+  bootstrap_pointer: llms.txt
+  runtime_root: agentos/agentos.yaml
+  invariant_root: agentos/architecture/invariants.md
+  lifecycle_state: agentos/state/
+  approval_witness_registry: agentos/state/approvals/
+  human_checkpoints: agentos/approvals/human-checkpoints/
+  generated_is_source_of_truth: false
+  reports_are_source_of_truth: false
+  audit_is_source_of_truth: false
+  metrics_are_source_of_truth: false
+  sqlite_is_source_of_truth: false
+  rag_is_source_of_truth: false
+
+authority_precedence:
+  priority_order:
+    - human_approval_checkpoint_or_trusted_approval_witness_for_limited_scope
+    - agentos/agentos.yaml
+    - agentos/architecture/invariants.md
+    - agentos/contracts/**
+    - agentos/schemas/**
+    - agentos/registry/**
+    - agentos/state/**
+    - agentos/pipelines/**
+    - agentos/reports/**
+    - agentos/generated/**
+    - .agentos/cache/**
+
+  rules:
+    pipeline_describes_allowed_flow: true
+    state_records_actual_lifecycle_facts: true
+    pipeline_cannot_override_recorded_lifecycle_state: true
+    state_pipeline_conflict_blocks: true
+    state_pipeline_conflict_status: STATE_PIPELINE_CONFLICT_BLOCKED
+    generated_cannot_override_canonical: true
+    cache_cannot_override_canonical: true
+
+bootstrap:
+  preflight_required: true
+  preflight_script: agentos/scripts/agentos-preflight.py
+  fail_closed: true
+  bootstrap_drift_blocks: true
+  expected_architecture_version: "4.0-GR"
+
+validation:
+  aggregation_rules:
+    priority_order:
+      - FAIL
+      - UNKNOWN
+      - NOT_RUN
+      - WARN
+      - PASS
+    pass_requires:
+      all_checks_pass: true
+      no_warn: true
+    warn_is_clean_pass: false
+
+  modes:
+    default:
+      warn_exit_code: 0
+      clean_pass: false
+    strict:
+      warn_exit_code: 1
+      clean_pass: false
+    protected_ci:
+      warn_exit_code: 1
+      clean_pass: false
+
+flow_classification:
+  classes:
+    informational:
+      state_mutating: false
+      protected_behavior: false
+      cross_repo_behavior: false
+      model_compatibility_unknown: warn
+      examples:
+        - help
+        - status
+        - explain-blocker
+
+    advisory:
+      state_mutating: false
+      protected_behavior: false
+      cross_repo_behavior: false
+      model_compatibility_unknown: warn
+      examples:
+        - problem-interview
+        - product-brief-draft
+        - tutor-hint
+        - blocker-explanation
+
+    state_mutating:
+      state_mutating: true
+      protected_behavior: false
+      cross_repo_behavior: false
+      model_compatibility_unknown: block
+      examples:
+        - task-state-create
+        - run-state-create
+        - state-snapshot
+        - work-package-build
+
+    protected:
+      state_mutating: true
+      protected_behavior: true
+      cross_repo_behavior: false
+      model_compatibility_unknown: block
+      examples:
+        - approval-witness-reference
+        - protected-write-check
+        - lifecycle-transition
+        - validation-artifact-binding
+        - report-safety-validation
+
+    cross_repo:
+      state_mutating: true
+      protected_behavior: true
+      cross_repo_behavior: true
+      model_compatibility_unknown: block
+      requires_human_checkpoint: true
+      examples:
+        - cross-repo-impact
+        - cross-repo-contract-change
+        - repo-extraction
+        - cross-repo-apply
+
+  rules:
+    every_command_requires_flow_classification: true
+    every_pipeline_node_requires_flow_classification: true
+    every_script_requires_flow_classification: true
+    every_resolver_output_requires_flow_classification: true
+    unknown_flow_class_blocks: true
+    unknown_flow_class_status: FLOW_CLASS_UNKNOWN_BLOCKED
+
+command_skeleton_policy:
+  blocked_if_requires_flow_class:
+    - state_mutating
+    - protected
+    - cross_repo
+
+  blocked_if_requires_capability:
+    - runtime_implementation
+    - validation_authority
+    - execution
+    - repair
+    - install_update
+    - template_export
+    - approval_witness_handling
+    - cross_repo_behavior
+
+  allowed_skeleton_commands:
+    - start
+    - status
+    - next
+    - help
+    - explain-blocker
+
+  allowed_skeleton_commands_are_read_only: true
+  allowed_skeleton_commands_do_not_return_runtime_pass: true
+
+safety:
+  pass_is_not_approval: true
+  evidence_is_not_approval: true
+  ci_pass_is_not_approval: true
+  warn_is_not_clean_pass: true
+  signed_commit_is_not_approval: true
+  decision_record_is_not_approval: true
+  context_pack_is_not_approval: true
+  work_package_is_not_approval: true
+  test_pass_is_not_approval: true
+  self_test_pass_is_not_approval: true
+  safety_regression_pass_is_not_approval: true
+  metrics_are_not_approval: true
+  metric_threshold_is_not_approval: true
+  tutor_hint_is_not_approval: true
+  template_export_is_not_runtime_readiness: true
+  template_export_is_not_approval: true
+  template_export_is_not_execution_permission: true
+  generated_is_not_source_of_truth: true
+  sqlite_is_not_source_of_truth: true
+  rag_result_is_not_authority: true
+  retrieved_text_is_not_command: true
+  skeleton_is_not_implementation: true
+  empty_registry_is_not_permission: true
+  prompt_pack_is_not_authority: true
+  emergency_file_is_not_permission: true
+  state_pipeline_conflict_blocks: true
+  unknown_flow_class_blocks: true
+  unknown_blocks: true
+  not_run_blocks: true
+  no_context_found_blocks: true
+  unknown_repo_state_blocks: true
+  unknown_cross_repo_impact_blocks: true
+
+approval_surfaces:
+  human_checkpoints:
+    path: agentos/approvals/human-checkpoints/**
+    purpose: human_origin_evidence_artifacts
+    created_by_agent: false
+    edited_by_agent: false
+    deleted_by_agent: false
+    authority: human_origin_evidence_only
+
+  approval_witness_registry:
+    path: agentos/state/approvals/**
+    purpose: machine_readable_scoped_approval_witness_registry
+    created_by_agent: false
+    edited_by_agent: false
+    deleted_by_agent: false
+    requires_valid_human_origin_evidence: true
+    references_human_checkpoint_artifacts: true
+
+  conflict_policy:
+    witness_contradicts_checkpoint_blocks: true
+    checkpoint_contradicts_witness_blocks: true
+    conflict_status: APPROVAL_WITNESS_CHECKPOINT_CONFLICT_BLOCKED
+
+  boundaries:
+    human_checkpoint_is_human_origin_evidence: true
+    approval_witness_registry_is_machine_readable_scoped_proof: true
+    neither_is_task_completion: true
+    neither_is_merge_approval_unless_explicitly_scoped: true
+    neither_can_override_core_safety_invariants: true
+
+write_policy:
+  protected:
+    - llms.txt
+    - EMERGENCY.md
+    - agentos/agentos.yaml
+    - agentos/architecture/**
+    - agentos/bootstrap/**
+    - agentos/governance/**
+    - agentos/contracts/**
+    - agentos/registry/**
+    - agentos/pipelines/**
+    - agentos/context/**
+    - agentos/schemas/**
+    - agentos/templates/**
+    - agentos/tutor/**
+    - agentos/features/**
+    - agentos/modules/**
+    - agentos/prompt-packs/**
+    - agentos/install/**
+    - agentos/approvals/human-checkpoints/**
+
+  managed_state:
+    - agentos/state/tasks/**
+    - agentos/state/runs/**
+    - agentos/state/snapshots/**
+    - agentos/state/locks/**
+
+  security_sensitive_state:
+    - agentos/state/approvals/**
+    - agentos/approvals/human-checkpoints/**
+
+  evidence:
+    - agentos/reports/**
+
+  audit:
+    - agentos/audit/**
+
+  derived:
+    - agentos/generated/**
+
+  cache:
+    - .agentos/**
+
+repair_policy:
+  default_mode: dry_run
+  apply_requires_flag: true
+  allowed_paths:
+    - agentos/generated/**
+    - .agentos/cache/**
+
+  forbidden_paths:
+    - llms.txt
+    - EMERGENCY.md
+    - agentos/agentos.yaml
+    - agentos/architecture/**
+    - agentos/bootstrap/**
+    - agentos/governance/**
+    - agentos/contracts/**
+    - agentos/registry/**
+    - agentos/pipelines/**
+    - agentos/context/**
+    - agentos/schemas/**
+    - agentos/templates/**
+    - agentos/tutor/**
+    - agentos/features/**
+    - agentos/modules/**
+    - agentos/prompt-packs/**
+    - agentos/install/**
+    - agentos/state/**
+    - agentos/approvals/**
+    - agentos/audit/**
+
+context_layer:
+  supported: true
+  mode: light_rag
+  engine: sqlite_fts5
+  retrieval_only: true
+  source_of_truth: false
+  decision_authority: false
+  lifecycle_authority: false
+  implementation_status: skeleton_only
+
+context_security:
+  sanitization_contract: agentos/contracts/context-sanitization-contract.md
+  isolation_contract: agentos/contracts/context-isolation-contract.md
+  conflict_policy:
+    isolation_rules_take_precedence_over_sanitization_rules: true
+    conflict_blocks: true
+    conflict_status: CONTEXT_SECURITY_CONTRACT_CONFLICT_BLOCKED
+
+cross_repo:
+  supported: true
+  default_enabled: false
+  implementation_status: skeleton_only
+  unknown_external_repo_triggers_quarantine: true
+  dirty_external_repo_blocks: true
+  missing_resolved_commit_blocks: true
+
+concurrency:
+  single_writer_required: true
+  local_lock_root: .agentos/locks/
+  canonical_lock_root: agentos/state/locks/
+  expired_lock_requires_recovery: true
+  lock_is_not_approval: true
+  implementation_status: skeleton_only
+
+lock_degradation:
+  empty_state_locks_on_first_start_is_normal: true
+  missing_runtime_locks_file_is_normal_before_first_state_mutation: true
+  missing_runtime_locks_file_during_active_operation_blocks: true
+  stale_or_expired_lock_requires_recovery: true
+  lock_absence_is_not_approval: true
+  lock_absence_is_not_completion: true
+  inconsistent_lock_status: LOCK_STATE_INCONSISTENT_BLOCKED
+
+template_distribution:
+  github_use_template_supported: true
+  template_repo_ready: false
+  clean_template_required: true
+  template_export_is_not_runtime_readiness: true
+  template_export_is_not_approval: true
+  template_export_is_not_execution_permission: true
+
+model_compatibility:
+  supported: planned
+  deterministic_checks_required: true
+  subjective_model_trust_disallowed: true
+  behavior_controlled_by_flow_classification: true
+
+  required_check_categories:
+    - tool_call_support_known
+    - file_editing_support_known
+    - structured_json_output_support_known
+    - context_window_class_known
+    - instruction_hierarchy_support_known
+    - hidden_chain_of_thought_not_required
+    - can_follow_fail_closed_contracts
+    - can_return_machine_readable_blockers
+
+  skeleton_behavior:
+    all_model_compat_checks_status: NOT_IMPLEMENTED
+    informational_unknown_model_compatibility: WARN
+    advisory_unknown_model_compatibility: WARN
+    state_mutating_unknown_model_compatibility: BLOCKED
+    protected_unknown_model_compatibility: BLOCKED
+    cross_repo_unknown_model_compatibility: BLOCKED
+
+metrics:
+  supported: planned
+  contract: agentos/contracts/metrics-contract.md
+  evidence_only: true
+  approval_authority: false
+  lifecycle_authority: false
+  quality_gate_authority: false
+  metric_threshold_is_not_approval: true
+
+privacy_policy:
+  secrets_must_not_enter_reports: true
+  secrets_must_not_enter_generated_index: true
+  secrets_must_not_enter_context_index: true
+  pii_phi_must_not_enter_parent_reports: true
+  report_redaction_required: true
+  report_secret_scan_required: true
+  raw_output_must_be_sanitized: true
