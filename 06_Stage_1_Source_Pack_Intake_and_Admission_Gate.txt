@@ -1,0 +1,189 @@
+# Stage 1 — Source Pack Intake and Admission Gate
+
+```yaml
+logical_document_id: stage_1_source_pack_intake_admission_gate
+canonical_file_name: "06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt"
+language: ru
+version: "2.0-lean-admission-policy"
+status: STAGE_1_GATE_DEFINED_LEAN
+canonical_stage: "Stage 1"
+role: source_pack_intake_and_admission_policy
+stage_1_execution_allowed_now: false
+project_transfer_allowed: false
+runtime_changes_allowed: false
+document_grants_approval: false
+approval_authority: human_only
+```
+
+## 1. Назначение
+
+Stage 1 проверяет, можно ли использовать active source pack и repository pointers как основу для дальнейшего planning.
+
+Этот документ задаёт policy-level границы Stage 1. Он не должен фиксировать все будущие имена отчётов, все YAML-поля и все validator details.
+
+Exact report filenames, templates and machine fields belong to Task 1.1 or later validators.
+
+## 2. Active source pack
+
+Stage 1 работает только с текущим active source pack:
+
+```text
+Архитектура.txt
+Скелет архитектуры.txt
+Roadmap.txt
+Адреса проектов.txt
+06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt
+08_Future_Feature_Candidates_Parking_Lot.txt
+```
+
+Старые 06–15, fixed-файлы, архивы, черновики и удалённые документы не являются active source. Если они обнаружены, они могут быть записаны как historical/legacy evidence, но не как authority.
+
+## 3. Что Stage 1 должен покрыть
+
+Stage 1 должен создать evidence, покрывающее следующие категории:
+
+- active source pack identity;
+- source document presence and snapshot status;
+- current development repository pointer status;
+- legacy repository pointer and pinned-source status;
+- old/new authority conflict review;
+- legacy transfer boundary;
+- feature admission boundary;
+- future feature boundary;
+- open blockers and unknowns;
+- readiness for human review.
+
+Форма evidence может быть одним report или несколькими reports. Главное — покрыть категории и не делать запрещённых claims.
+
+## 4. Что агент может выбирать сам
+
+В рамках Task 1.1 агент может предложить:
+
+- структуру отчёта;
+- количество вспомогательных reports;
+- названия sections;
+- группировку findings;
+- формат blocker register;
+- draft для следующего task brief.
+
+Эта свобода не даёт права менять safety-core, approval boundary, lifecycle или scope.
+
+## 5. Execution preconditions
+
+Stage 1 execution возможен только если:
+
+- Task 1.1 brief существует;
+- human authorization на запуск Task 1.1 существует;
+- active source pack явно указан;
+- repository pointer document существует или его отсутствие зафиксировано как blocker.
+
+Не требуется заранее иметь verified pinned legacy commit. Он проверяется во время Stage 1.
+
+## 6. Completion/readiness preconditions
+
+Stage 1 может считаться clean-ready only if:
+
+- required evidence categories covered;
+- required source documents identified;
+- repository pointer statuses recorded;
+- legacy pinned-source status recorded;
+- no unresolved authority conflict remains;
+- no required UNKNOWN remains untreated;
+- forbidden claims are absent;
+- human review is still required and not simulated.
+
+Если pinned legacy source, current repo status или source document snapshot остаются UNKNOWN, clean readiness невозможна. Это блокирует completion/readiness, а не подготовку или запуск authorized intake task.
+
+## 7. Allowed actions
+
+Allowed:
+
+- read active source pack;
+- read repository pointers;
+- inspect legacy source for verification only;
+- record snapshots or hashes when available;
+- record unknowns and blockers;
+- classify legacy material as candidate/deferred/rejected/requires review;
+- draft evidence;
+- draft next-step recommendations for human review.
+
+## 8. Forbidden actions
+
+Forbidden:
+
+- implement runtime;
+- physically materialize skeleton;
+- copy legacy files as active source;
+- mutate lifecycle state;
+- create approval;
+- claim PASS as approval;
+- treat UNKNOWN as OK;
+- start Stage 2 automatically;
+- modify protected/canonical docs as execution side effect without explicit scope;
+- expand Stage 1 into feature implementation.
+
+## 9. Legacy transfer modes
+
+Legacy material may be classified as:
+
+- reusable principle;
+- candidate capability;
+- deferred capability;
+- rejected legacy-only material;
+- requires human architecture decision;
+- blocked/unknown.
+
+Accepted legacy material must be re-expressed for the new architecture. Legacy text, old lifecycle state and old PASS do not transfer automatically.
+
+## 10. Feature admission boundary
+
+A feature can be admitted only if there is enough evidence for:
+
+- target layer;
+- source-of-truth impact;
+- context growth impact;
+- approval/evidence/PASS boundary;
+- lifecycle impact;
+- validation or negative-case expectations;
+- risk class or human-review requirement.
+
+If evidence is insufficient, classify as deferred, research-only, rejected, or blocked. Do not silently admit.
+
+## 11. Future feature boundary
+
+Future candidates remain parking lot items until a human checkpoint or explicit roadmap/task update promotes them.
+
+Parking lot entry does not mean:
+
+- roadmap item;
+- approval;
+- implementation permission;
+- Stage 1 scope;
+- current transfer requirement.
+
+## 12. Completion statuses
+
+Stage 1 may end as:
+
+```text
+READY_FOR_HUMAN_REVIEW
+READY_WITH_WARNINGS_FOR_HUMAN_REVIEW
+BLOCKED
+INCOMPLETE
+```
+
+These statuses are evidence states only. They are not approval and do not start Stage 2.
+
+## 13. Final boundary
+
+```yaml
+STAGE_1_IS_INTAKE_ONLY: true
+EXACT_REPORT_PATHS_DEFINED_BY_TASK_BRIEF: true
+PROJECT_TRANSFER_ALLOWED: false
+RUNTIME_IMPLEMENTATION_ALLOWED: false
+PHYSICAL_SKELETON_MATERIALIZATION_ALLOWED: false
+APPROVAL_GRANTED: false
+DOCUMENT_GRANTS_APPROVAL: false
+APPROVAL_AUTHORITY: human_only
+HUMAN_REVIEW_REQUIRED: true
+```

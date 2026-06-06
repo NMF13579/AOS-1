@@ -1,0 +1,125 @@
+# Future Feature Candidates Parking Lot
+
+```yaml
+logical_document_id: future_feature_candidates_parking_lot
+canonical_file_name: "08_Future_Feature_Candidates_Parking_Lot.txt"
+language: ru
+version: "2.0-lean-parking-lot"
+status: FUTURE_FEATURE_PARKING_LOT_DEFINED
+role: future_candidate_register
+implementation_permission: false
+document_grants_approval: false
+approval_authority: human_only
+```
+
+## 1. Назначение
+
+Этот документ хранит будущие feature candidates, чтобы не потерять идеи и не раздувать Stage 1.
+
+Parking lot не является:
+
+- roadmap;
+- approval;
+- implementation plan;
+- milestone plan;
+- execution permission;
+- feature admission decision;
+- source of truth для текущей реализации.
+
+## 2. Главная граница
+
+```text
+Future feature candidate ≠ roadmap item.
+Parking lot ≠ approval.
+Research idea ≠ core requirement.
+Deferred feature ≠ active scope.
+Mentioned feature ≠ permission to build.
+```
+
+Фича может выйти из parking lot только через human checkpoint, roadmap update или explicit task brief.
+
+## 3. Allowed statuses
+
+Разрешённые статусы:
+
+```text
+DEFERRED
+RESEARCH_ONLY
+REJECTED_AS_CORE_DEFAULT
+NEEDS_HUMAN_ARCHITECTURE_DECISION
+UNKNOWN_BLOCKED
+```
+
+Запрещённые статусы:
+
+```text
+CORE_REQUIRED
+IMPLEMENTATION_READY
+APPROVED
+READY_TO_BUILD
+AUTO_ADMITTED
+```
+
+## 4. Future candidates
+
+| ID | Candidate | Status | Boundary |
+|---|---|---|---|
+| F-20 | Git Context Controller / GCC | DEFERRED | not core for Stage 1 |
+| F-21 | Letta git-backed memory | RESEARCH_ONLY | not memory authority |
+| F-31 | Adaptive compute / voting | RESEARCH_ONLY | not validation authority |
+| F-32 | Hotswap small→large model | RESEARCH_ONLY | not execution permission |
+| F-33 | Fine-tuning on AgentOS data | RESEARCH_ONLY | requires privacy/security review |
+| F-34 | Multi-agent debate | RESEARCH_ONLY | not approval or arbitration |
+| F-35 | AgentOps Replay | DEFERRED | evidence only, not approval |
+| F-43 | Cross-repo sync | DEFERRED | high authority-drift risk |
+
+## 5. Rejected as core default
+
+| ID | Candidate | Status | Reason |
+|---|---|---|---|
+| R-01 | LangGraph / CrewAI as core | REJECTED_AS_CORE_DEFAULT | adds unnecessary runtime/backend layer |
+| R-02 | Full Mem0 as core | REJECTED_AS_CORE_DEFAULT | memory authority drift risk |
+| R-03 | Mandatory vector DB RAG | REJECTED_AS_CORE_DEFAULT | violates Markdown-first MVP |
+| R-04 | Agentless flow without safety | REJECTED_AS_CORE_DEFAULT | removes governance boundary |
+| R-05 | Self-heal business logic | REJECTED_AS_CORE_DEFAULT | hidden automation risk |
+| R-06 | Automatic canonical rule creation | REJECTED_AS_CORE_DEFAULT | agent must not create authority |
+| R-07 | CI/PASS/evidence as approval | REJECTED_AS_CORE_DEFAULT | violates PASS ≠ approval |
+| R-08 | Medical/clinical logic in core | REJECTED_AS_CORE_DEFAULT | must be domain layer, not core |
+
+## 6. Promotion rule
+
+Before promotion, a candidate needs human review of:
+
+- target layer;
+- risk class;
+- source-of-truth impact;
+- approval boundary;
+- lifecycle boundary;
+- validation/negative-case need;
+- implementation scope.
+
+This document does not need to store exact promotion fields. Exact promotion format belongs to a future task brief or validator.
+
+## 7. Forbidden claims
+
+Forbidden claims:
+
+```text
+This feature is approved.
+This feature is ready to implement.
+This feature is part of Stage 1.
+This feature is required for current transfer.
+This feature can start automatically.
+This feature has human approval because it is listed here.
+```
+
+## 8. Final boundary
+
+```yaml
+FUTURE_FEATURES_RECORDED: true
+ROADMAP_UNCHANGED: true
+IMPLEMENTATION_ALLOWED: false
+DOCUMENT_GRANTS_APPROVAL: false
+APPROVAL_AUTHORITY: human_only
+HUMAN_CHECKPOINT_REQUIRED_FOR_PROMOTION: true
+```

@@ -1,0 +1,297 @@
+# AgentOS Roadmap
+
+```yaml
+logical_document_id: agentos_roadmap
+canonical_file_name: "Roadmap.txt"
+language: ru
+version: "2.0-lean-roadmap"
+status: ROADMAP_LEAN_SEQUENCE_DEFINED
+role: implementation_sequence_guidance
+source_pack_draft_ready: true
+source_pack_human_reviewed: false
+task_1_1_brief_preparation_allowed: true
+stage_1_execution_allowed: false
+project_transfer_allowed: false
+runtime_ready: false
+execution_ready: false
+validation_ready: false
+document_grants_approval: false
+approval_authority: human_only
+```
+
+## 1. Назначение
+
+Roadmap задаёт порядок реализации AgentOS. Он не должен превращаться в schema, validator или полный список report paths.
+
+Roadmap отвечает за:
+
+- порядок Stage;
+- цель Stage;
+- границы Stage;
+- запрещённые действия;
+- required evidence categories.
+
+Roadmap не отвечает за:
+
+- точные имена отчётов;
+- точные YAML/JSON поля;
+- validator commands;
+- approval;
+- lifecycle mutation;
+- runtime readiness.
+
+Конкретные filenames, templates и machine fields задаются в task brief, templates, schemas или validators на соответствующем этапе.
+
+## 2. Active source pack
+
+Текущий active source pack состоит из:
+
+```text
+Архитектура.txt
+Скелет архитектуры.txt
+Roadmap.txt
+Адреса проектов.txt
+06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt
+08_Future_Feature_Candidates_Parking_Lot.txt
+```
+
+Минимальная authority model:
+
+- `Архитектура.txt` — смысл и safety-core.
+- `Скелет архитектуры.txt` — целевая структура.
+- `Roadmap.txt` — порядок реализации.
+- `Адреса проектов.txt` — адреса current и legacy repositories.
+- `06_Stage_1...` — Stage 1 intake/admission policy.
+- `08_Future...` — future candidates parking lot.
+
+Если возникает конфликт, агент должен остановиться и зафиксировать conflict/blocker вместо самостоятельного resolution.
+
+## 3. Нумерация
+
+Каноническая нумерация начинается с Stage 1.
+
+Разрешено:
+
+```text
+Stage 1
+Stage 2
+Task 1.1
+Task 2.1
+Task 2.1.1
+```
+
+Исторические aliases `E0` и `A4.E0` можно упоминать только как legacy aliases. Они не являются текущей нумерацией.
+
+## 4. Global boundaries
+
+Для всех Stage действуют правила:
+
+- Stage output is evidence, not approval.
+- PASS is not approval.
+- Evidence is not approval.
+- CI PASS is not approval.
+- UNKNOWN blocks clean readiness.
+- NOT_RUN is not PASS.
+- Human checkpoint is required for approval and irreversible decisions.
+- Scope must not expand without explicit permission.
+- Future feature candidate is not implementation permission.
+- Legacy material is reference only until admitted.
+
+## 5. Stage 1 — Source Pack Intake and Verification
+
+Purpose: проверить, что source pack, repository pointers и legacy boundaries достаточно ясны для дальнейшего planning.
+
+Status now:
+
+```yaml
+stage: 1
+name: Source Pack Intake and Verification
+implementation_stage: false
+runtime_changes_allowed: false
+output_boundary: evidence_only
+execution_allowed_now: false
+next_allowed_action: prepare_task_1_1_brief
+```
+
+Required evidence categories:
+
+- active source pack identity;
+- source document presence/snapshot status;
+- current development repository pointer status;
+- legacy repository pointer and pinned-source status;
+- old/new authority conflict review;
+- feature admission boundary;
+- future feature boundary;
+- open blockers and unknowns;
+- readiness for human review.
+
+Allowed:
+
+- read source documents;
+- inspect repository pointers;
+- record evidence;
+- list blockers;
+- propose Task 1.1 outputs.
+
+Forbidden:
+
+- runtime implementation;
+- legacy file transfer;
+- physical skeleton materialization;
+- approval creation;
+- lifecycle mutation;
+- automatic Stage 2 start.
+
+Exact report names and fields are defined by Task 1.1, not by this roadmap.
+
+## 6. Stage 2 — Legacy Mapping and Feature Admission Alignment
+
+Purpose: map useful legacy capabilities to the target architecture without importing old implementation by default.
+
+Required evidence categories:
+
+- candidate legacy capabilities;
+- admitted/deferred/rejected classification;
+- source-of-truth impact;
+- context-growth impact;
+- parity expectations where needed;
+- do-not-import findings;
+- blockers and unresolved human decisions.
+
+Forbidden:
+
+- direct copy-paste as authority;
+- runtime implementation;
+- automatic feature admission;
+- project transfer completion claim.
+
+## 7. Stage 3 — Bootstrap Preflight
+
+Purpose: implement the minimal startup/preflight layer after Stage 1 and Stage 2 have acceptable outcomes.
+
+Expected capability:
+
+- detect whether AgentOS is installed/usable;
+- fail closed if required source/runtime components are missing;
+- produce clear human-readable blocker messages.
+
+Forbidden:
+
+- autonomous task execution;
+- approval simulation;
+- destructive repair;
+- hidden lifecycle mutation.
+
+## 8. Stage 4 — Governance, Contracts, State and Approval Boundary
+
+Purpose: define and implement the minimal governance layer.
+
+Expected capability areas:
+
+- write policy;
+- protected paths;
+- authority resolution;
+- task/run state model;
+- approval witness boundary;
+- lifecycle mutation rules.
+
+Boundary: governance records and checks facts. It does not replace human approval.
+
+## 9. Stage 5 — Validation, Evidence and False PASS Resistance
+
+Purpose: make validation evidence-based and resistant to fake PASS.
+
+Expected capability areas:
+
+- validation result semantics;
+- evidence artifact boundary;
+- negative cases;
+- false PASS checks;
+- deterministic checker behavior;
+- visible warnings and blockers.
+
+Boundary: validation can block or warn. It cannot approve.
+
+## 10. Stage 6 — Spec-to-Verification Workflow
+
+Purpose: connect idea, specification, task, work package, execution evidence and verification.
+
+Expected capability areas:
+
+- problem interview;
+- product brief;
+- spec draft/review;
+- task draft/activation;
+- work package;
+- result review;
+- human checkpoint.
+
+Boundary: workflow does not auto-complete tasks or auto-approve results.
+
+## 11. Stage 7 — Recovery, Context and Lessons
+
+Purpose: add controlled recovery, context selection and lesson capture without creating hidden memory authority.
+
+Expected capability areas:
+
+- recovery state;
+- context pack;
+- lessons and incidents;
+- generated indexes as navigation only;
+- context poisoning defense.
+
+Boundary: context helps execution but does not override source of truth.
+
+## 12. Stage 8 — Clean Template Export
+
+Purpose: prepare a clean distributable template after the core path is stable enough.
+
+Dependency: Stage 7 must be complete or explicitly waived by human checkpoint.
+
+Expected capability areas:
+
+- clean template contents;
+- install/update/remove boundaries;
+- generated/cache exclusion;
+- user-facing startup docs.
+
+Boundary: template export is not product approval or release approval.
+
+## 13. Stage 9 — Optional Modules and Adapters
+
+Purpose: add optional extension layers only after core governance is stable.
+
+Possible areas:
+
+- SaaS/dashboard;
+- IDE adapters;
+- design module;
+- domain modules;
+- medical domain layer;
+- cross-repo coordination.
+
+Boundary: optional module must not weaken core invariants.
+
+## 14. Minimal MVP path
+
+Default MVP path:
+
+```text
+Stage 1 → Stage 2 → Stage 3 → Stage 4 → Stage 5 → Stage 6 → Stage 7 → Stage 8
+```
+
+Stage 9 is not part of the minimal core MVP.
+
+## 15. Current next action
+
+```yaml
+NEXT_ACTION: PREPARE_TASK_1_1_BRIEF
+STAGE_1_EXECUTION_ALLOWED_NOW: false
+PROJECT_TRANSFER_ALLOWED: false
+PHYSICAL_SKELETON_MATERIALIZATION_ALLOWED_NOW: false
+RUNTIME_READY: false
+EXECUTION_READY: false
+VALIDATION_READY: false
+DOCUMENT_GRANTS_APPROVAL: false
+APPROVAL_AUTHORITY: human_only
+```

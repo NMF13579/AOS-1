@@ -1,0 +1,907 @@
+# Архитектура AgentOS
+
+```yaml
+logical_document_id: target_architecture
+canonical_file_name: "Архитектура.txt"
+language: ru
+version: "4.4-GR-repaired-stage1-and-materialization-boundaries"
+status: ARCHITECTURE_DEFINED_SOURCE_PACK_SYNCED_REPAIRED_BOUNDARIES
+architecture_role: semantic_authority
+roadmap_numbering: stage_based
+current_stage_name: "Stage 1"
+legacy_stage_aliases:
+  - "E0"
+  - "A4.E0"
+a4_0_gr_role: architecture_version_label_only
+runtime_ready: false
+execution_ready: false
+validation_ready: false
+document_grants_approval: false
+approval_authority: human_only
+source_pack_draft_ready: true
+source_pack_human_reviewed: false
+task_1_1_brief_preparation_allowed: true
+stage_1_execution_allowed: false
+project_transfer_allowed: false
+stage_1_gate_path: "06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt"
+repository_pointers_path: "Адреса проектов.txt"
+future_feature_candidates_path: "08_Future_Feature_Candidates_Parking_Lot.txt"
+```
+
+## 1. Короткий вывод
+
+AgentOS — Markdown-first система управления AI-assisted software development внутри репозитория.
+
+AgentOS не является автономным агентом. AgentOS является governance/runtime-слоем, который задаёт правила работы агента с задачами, состоянием, scope, validation, evidence и human approval.
+
+Главная цель архитектуры — не ускорить агента любой ценой, а не дать ему создать ложный PASS, скрытый approval, неконтролируемый lifecycle mutation или перенос legacy-ошибок в новый проект.
+
+```text
+Strict inside.
+Simple outside.
+Human decides.
+```
+
+## 2. Нормализация Stage 1
+
+Каноническая roadmap-нумерация:
+
+```text
+Stage 1 — Source Pack Intake and Verification
+Task 1.1 — Source Pack Intake and Verification
+```
+
+Исторические alias-имена:
+
+```text
+E0
+A4.E0
+```
+
+Правило:
+
+```text
+Stage 1 — текущее каноническое имя.
+E0 и A4.E0 — только legacy aliases.
+A4.0-GR — label версии архитектуры, не roadmap stage.
+A4.x не используется как текущая roadmap-нумерация.
+```
+
+Канонический gate-файл Stage 1:
+
+```text
+06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt
+```
+
+Канонический repository pointer document:
+
+```text
+Адреса проектов.txt
+```
+
+Этот файл содержит:
+
+```text
+current development repository pointer
+previous legacy repository pointer
+```
+
+Канонический parking lot будущих фич:
+
+```text
+08_Future_Feature_Candidates_Parking_Lot.txt
+```
+
+## 3. Назначение архитектуры
+
+Архитектура должна решить 7 задач:
+
+1. Дать пользователю простой вход: “Начнём проект”.
+2. Превратить идею в ТЗ, задачи и work package.
+3. Дать агенту только один следующий разрешённый шаг.
+4. Проверять scope, state, context, validation и evidence.
+5. Не допустить ложного PASS.
+6. Не допустить симуляции human approval.
+7. Поддержать clean template distribution.
+
+Архитектура не является:
+
+- autonomous agent platform;
+- full RAG/vector DB platform;
+- SaaS dashboard;
+- medical system;
+- release approval system;
+- replacement for human review;
+- self-healing business logic engine.
+
+## 4. Главная формула
+
+```text
+Root is user-owned.
+agentos/ is governed AgentOS core.
+.agentos/ is local runtime/cache.
+llms.txt is bootstrap pointer.
+Text declares.
+State records.
+Registry maps.
+Pipeline routes.
+Resolver selects one next safe action.
+RAG retrieves.
+SQLite accelerates.
+Code verifies.
+Generated reflects.
+Reports evidence.
+Audit records.
+Human approves.
+Agent executes only within granted scope.
+```
+
+По-русски:
+
+```text
+Текст задаёт смысл.
+State фиксирует состояние.
+Registry строит карту.
+Pipeline задаёт маршрут.
+Resolver выбирает один безопасный следующий шаг.
+RAG только достаёт контекст.
+SQLite только ускоряет поиск.
+Код проверяет.
+Generated только отражает.
+Reports дают evidence.
+Audit записывает события.
+Человек approve’ит.
+Агент исполняет только разрешённый scope.
+```
+
+## 5. Базовые инварианты AgentOS
+
+Эти правила нельзя переопределить через pipeline, registry, context, SQLite, RAG, CI, generated files, reports, audit, agent output, prompt pack или SaaS UI.
+
+```text
+PASS ≠ approval.
+Evidence ≠ approval.
+CI PASS ≠ approval.
+WARN ≠ clean PASS.
+Signed commit ≠ approval.
+Decision Record ≠ approval.
+Context Pack ≠ approval.
+Work Package ≠ approval.
+Task test PASS ≠ approval.
+Self-test PASS ≠ approval.
+Safety regression PASS ≠ approval.
+Human approval нельзя симулировать.
+```
+
+Fail-closed:
+
+```text
+UNKNOWN → BLOCKED.
+NOT_RUN → BLOCKED.
+NO_CONTEXT_FOUND → BLOCKED.
+UNKNOWN_REPO_STATE → BLOCKED.
+UNKNOWN_CROSS_REPO_IMPACT → BLOCKED.
+BOOTSTRAP_UNKNOWN → BLOCKED.
+BOOTSTRAP_NOT_RUN → BLOCKED.
+SOURCE_DOCUMENT_CONFLICT → BLOCKED.
+DUPLICATE_AUTHORITY → BLOCKED.
+```
+
+Source-of-truth:
+
+```text
+Markdown/YAML = source of truth.
+JSON/index/cache = derived only.
+SQLite = cache only.
+RAG result = retrieved data, not authority.
+Generated artifact = derived reflection, not authority.
+Reports = evidence only.
+Audit = evidence only.
+Dashboard = read model, not authority.
+```
+
+Lifecycle:
+
+- scope задачи не расширяется без явного разрешения;
+- protected/canonical files требуют human checkpoint;
+- multi-repo changes требуют human checkpoint;
+- cascade execution запрещён без отдельного human checkpoint;
+- один сигнал — одно действие;
+- следующий milestone/stage не запускается автоматически.
+
+Priority:
+
+```text
+Safety > speed.
+Truthful status > convenience.
+Human approval > automation.
+Traceability > convenience.
+Verifiability > efficiency.
+Architecture correctness > short-term velocity.
+```
+
+## 6. Architecture Authority Boundary
+
+Этот документ определяет смысловую архитектуру AgentOS.
+
+Он владеет:
+
+- назначением системы;
+- safety invariants;
+- authority model;
+- lifecycle boundaries;
+- approval boundaries;
+- source-of-truth rules;
+- runtime layer meaning;
+- governance principles;
+- high-level capability boundaries.
+
+Этот документ не владеет полной физической структурой файлов. Полная физическая структура определяется:
+
+```text
+Скелет архитектуры.txt
+```
+
+Authority split:
+
+```yaml
+architecture_authority:
+  document: "Архитектура.txt"
+  owns:
+    - system_purpose
+    - safety_invariants
+    - authority_model
+    - lifecycle_boundaries
+    - approval_boundaries
+    - source_of_truth_rules
+    - runtime_layer_meaning
+    - governance_principles
+    - target_architecture_semantics
+skeleton_authority:
+  document: "Скелет архитектуры.txt"
+  owns:
+    - physical_directory_layout
+    - file_tree
+    - placeholder_files
+    - stub_script_rules
+    - skeleton_materialization_rules
+    - clean_template_file_structure
+    - local_runtime_folder_rules
+roadmap_authority:
+  document: "Roadmap.txt"
+  owns:
+    - implementation_sequence
+    - stage_order
+    - next_action_pointer
+stage_1_gate_authority:
+  document: "06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt"
+  owns:
+    - source_pack_intake_rules
+    - feature_admission_boundary
+    - legacy_transfer_boundary
+    - parity_negative_case_rules
+future_parking_lot:
+  document: "08_Future_Feature_Candidates_Parking_Lot.txt"
+  owns:
+    - future_candidates_only
+```
+
+Conflict rules:
+
+- если архитектура конфликтует со скелетом по физической структуре, выигрывает `Скелет архитектуры.txt`;
+- если скелет конфликтует с safety invariants, выигрывает `Архитектура.txt`;
+- если roadmap конфликтует с архитектурными инвариантами, выигрывает `Архитектура.txt`;
+- если future parking lot пытается расширить scope, выигрывает roadmap/task brief/human checkpoint;
+- если конфликт нельзя разрешить механически, результат `SOURCE_DOCUMENT_CONFLICT_BLOCKED`.
+
+## 7. Physical Skeleton Summary
+
+Минимальный tracked template/root layout:
+
+```text
+project-root/
+  llms.txt
+  agentos/
+  user-project-files...
+```
+
+Local runtime after first startup:
+
+```text
+project-root/
+  .agentos/
+    cache/
+    locks/
+```
+
+`.agentos/` is expected only as local runtime/cache after startup. It must be gitignored and must not be tracked in the clean template repo.
+
+Ownership:
+
+```yaml
+root_layout:
+  project_root:
+    owner: user
+    role: user_project_space
+  llms_txt:
+    owner: AgentOS bootstrap
+    role: bootstrap_pointer
+    runtime_authority: false
+  agentos_folder:
+    owner: AgentOS
+    role: governed_system_core
+  dot_agentos_folder:
+    owner: local_runtime
+    role: cache_locks_local_runtime
+    gitignored: true
+    source_of_truth: false
+```
+
+Boundary:
+
+```text
+Root is user-owned.
+agentos/ is AgentOS-owned.
+.agentos/ is local runtime/cache.
+llms.txt is bootstrap pointer, not runtime authority.
+```
+
+## 8. Core Ownership Model
+
+### 8.1 User-owned root
+
+Корень проекта принадлежит пользователю. Агент не может:
+
+- считать весь root своей зоной;
+- удалять пользовательские файлы;
+- перемещать пользовательский проект;
+- превращать root в AgentOS-owned namespace;
+- создавать скрытую lifecycle authority в root.
+
+### 8.2 AgentOS-owned core
+
+`agentos/` принадлежит AgentOS и содержит governed core, contracts, registry, state, pipelines, validation, templates, reports and approval surfaces.
+
+Агент не может:
+
+- удалять `agentos/`;
+- самовольно заменять `agentos/`;
+- переписывать protected/canonical файлы без checkpoint;
+- repair meaning/state/approval;
+- считать generated/cache источником истины.
+
+### 8.3 Local runtime/cache
+
+`.agentos/` является локальной runtime/cache зоной.
+
+Правила:
+
+```text
+.agentos/ must be gitignored.
+.agentos/ must not enter GitHub template repo.
+.agentos/ may be rebuilt when safe.
+.agentos/ is never source of truth.
+Loss of .agentos/ does not mean loss of task state or approval.
+```
+
+## 9. User-facing Layer
+
+Пользователь не должен вручную управлять внутренними механизмами: registry, pipeline yaml, context sqlite, generated indexes, checksums, chunking, resolver internals, cross-repo contracts.
+
+Пользователь видит guided workflow:
+
+```text
+Начнём проект.
+Сделай ТЗ.
+Разбей на задачи.
+Подготовь выполнение.
+Проверь результат.
+Что дальше?
+```
+
+CLI entrypoint:
+
+```text
+python3 agentos/agentos.py start
+python3 agentos/agentos.py status
+python3 agentos/agentos.py next
+python3 agentos/agentos.py resume
+python3 agentos/agentos.py explain-blocker
+python3 agentos/agentos.py help
+```
+
+Команды, меняющие state, execution или protected surfaces, требуют preconditions and human authorization.
+
+## 10. User Modes
+
+```yaml
+user_modes:
+  beginner:
+    default: true
+    show_internal_errors: false
+    ask_one_question_at_time: true
+    show_next_action_only: true
+    sqlite_visible: false
+    rag_visible: false
+    registry_visible: false
+  builder:
+    show_internal_errors: summarized
+    ask_one_question_at_time: false
+    show_validation_summary: true
+    sqlite_visible: false
+    rag_visible: summarized
+    registry_visible: summarized
+  architect:
+    show_internal_errors: true
+    show_raw_validation: true
+    sqlite_visible: true
+    rag_visible: true
+    registry_visible: true
+```
+
+Visibility changes do not weaken safety.
+
+## 11. Architecture Layers
+
+| Layer | Назначение |
+|---|---|
+| Bootstrap | безопасный старт через `llms.txt` и preflight |
+| Governance | инварианты, authority, write policy, approval boundaries |
+| Contract | формальные runtime/validation/recovery/update/module semantics |
+| Registry | карта documents/features/modules/scripts/schemas/templates/repos |
+| State | task/run/approval/snapshot lifecycle facts |
+| Resolver | один следующий безопасный шаг |
+| Pipeline | bounded flows без cascade automation |
+| Validation | deterministic checks, false PASS resistance, negative cases |
+| Context | retrieval-only context selection |
+| Evidence | reports, work packages, decision records, context packs |
+| Audit | append-only evidence of events |
+| Tutor | простые объяснения пользователю |
+| Install/Update | install, update, removal, clean template export |
+| Module | optional modules без расширения core permissions |
+
+## 12. Bootstrap Layer
+
+`llms.txt` — bootstrap pointer.
+
+Он должен:
+
+- указать, где установлен AgentOS;
+- указать первые обязательные файлы для чтения;
+- закрепить базовые safety rules;
+- направить агента к `agentos/agentos.py`;
+- не быть runtime authority;
+- не быть source of truth для lifecycle, validation или approval.
+
+Запрещено:
+
+```text
+llms.txt as PRIMARY authority
+llms.txt as SOURCE_OF_TRUTH
+llms.txt as full rule dump
+llms.txt as lifecycle authority
+llms.txt as approval authority
+```
+
+## 13. Governance Layer
+
+Минимальные governance rules:
+
+- protected paths require checkpoint;
+- approval cannot be simulated;
+- reports are evidence only;
+- validation cannot mutate lifecycle;
+- generated/cache cannot override canonical text;
+- unknown blocks;
+- not_run blocks;
+- one signal triggers one action;
+- cascade execution requires human checkpoint;
+- task scope cannot expand silently.
+
+Governance layer сильнее tutor hints, prompt packs, generated indexes, dashboard, agent report, CI green result, work package and context pack.
+
+## 14. Contract / Registry / State / Resolver / Pipeline
+
+Contracts define allowed meaning. Implementation must obey contract. Generated artifacts cannot override contract.
+
+Registry maps declared surfaces but cannot approve, execute, complete task or replace human checkpoint.
+
+State records lifecycle facts. Agent report, decision record and validation PASS are not lifecycle state.
+
+Resolver returns one allowed next action and cannot execute commands, mutate files, create approval, complete task or start next stage.
+
+Pipeline defines bounded flows but cannot approve, skip resolver, mutate lifecycle without state rules or run cascade execution.
+
+## 15. Documentation Factory and Work Package Boundary
+
+Controlled chain:
+
+```text
+problem interview
+  ↓
+product brief
+  ↓
+spec draft
+  ↓
+spec validation
+  ↓
+human spec review
+  ↓
+task drafts
+  ↓
+task scope validation
+  ↓
+human task review
+  ↓
+work package
+  ↓
+controlled execution request
+```
+
+Boundary:
+
+```text
+Interview draft is not approved spec.
+Spec draft is not execution permission.
+Task draft is not active task.
+Work package is not approval.
+Validation PASS is not approval.
+Human decision remains required.
+```
+
+Work package is bounded input for agent execution. It is not source of truth, approval authority or lifecycle authority.
+
+## 16. Validation / Evidence / Approval
+
+Validation checks deterministic things:
+
+- file structure;
+- required fields;
+- allowed statuses;
+- forbidden claims;
+- exit-code/result consistency;
+- negative cases;
+- protected/canonical boundaries;
+- scope compliance.
+
+Validation cannot approve, mutate lifecycle or mark task done by itself.
+
+Evidence records observable facts: reports, stdout/stderr, exit codes, snapshots, hashes, validation outputs. Evidence is material for human review, not approval.
+
+Human approval is separate and higher than PASS/evidence/CI. Agent cannot create or simulate it.
+
+## 17. Report Safety / Audit
+
+Reports must not claim:
+
+```text
+approved
+human approved
+done without review
+merged
+released
+execution authorized
+lifecycle mutated
+```
+
+unless a trusted human checkpoint or actual recorded state proves it.
+
+Audit is evidence only. Audit cannot approve, repair, mutate lifecycle or overwrite history.
+
+## 18. Context / Generated / Cache Boundary
+
+Context layer selects relevant context and must minimize prompt bloat.
+
+RAG-light and SQLite are allowed only as retrieval/cache/navigation helpers:
+
+```text
+Markdown/YAML = meaning.
+JSON/index = navigation.
+SQLite = speed.
+RAG result = retrieved data.
+Context Pack = task-applicable context.
+Verification = compliance with selected context.
+```
+
+Generated artifacts cannot become source of truth.
+
+## 19. Degradation / Concurrency / Recovery
+
+If critical input is missing, stale, conflicting or unknown, AgentOS must degrade to blocked or review-required state.
+
+Concurrency model must prevent competing mutations, stale approvals and conflicting task states.
+
+Recovery may restore structure or explain blockers. Recovery must not self-heal business logic, approval, protected/canonical meaning or lifecycle decisions.
+
+## 20. Install / Update / Removal / Template Export
+
+Install:
+
+- dry-run first;
+- no overwrite by default;
+- no delete by default;
+- no commit/push;
+- no approval claim.
+
+Update:
+
+- diff required;
+- protected paths require checkpoint;
+- source-of-truth changes require explicit authorization;
+- generated/cache rebuild allowed only when safe.
+
+Removal:
+
+- must preserve user files;
+- must not delete approvals/evidence without human instruction;
+- must explain what remains.
+
+Clean template must not include old reports, approvals, audit logs, cache, secrets, private context or local runtime artifacts.
+
+## 21. Feature and Module Lifecycle
+
+Every new feature must have:
+
+- owner layer;
+- metric;
+- source-of-truth impact review;
+- context growth review;
+- validation plan;
+- negative cases;
+- rollback or deprecation plan if relevant.
+
+Future feature candidates live in:
+
+```text
+08_Future_Feature_Candidates_Parking_Lot.txt
+```
+
+They are not roadmap items and not implementation permission.
+
+## 22. Core / SaaS / Domain Split
+
+AgentOS core — governance engine for AI-assisted development.
+
+SaaS — UX, onboarding, dashboard, collaboration and commercial layer.
+
+Domain modules — optional external layers, for example medicine, design, product templates.
+
+Медицина не входит в AgentOS core. Клинические решения требуют отдельного safety/compliance/privacy/liability слоя.
+
+## 23. Cross-Repo / Security / Privacy Boundary
+
+Cross-repo changes require explicit boundary, source mapping and human checkpoint. Unknown cross-repo impact blocks.
+
+Security/privacy rules:
+
+- no secrets in reports;
+- no tokens in generated indexes;
+- no private keys in templates;
+- unknown data classification blocks export;
+- medical/personal data requires separate access/storage/audit/deletion architecture.
+
+## 24. Model Compatibility Boundary
+
+AgentOS must work with different AI coding agents and IDEs through adapter/prompt-pack boundaries.
+
+Adapters are derived/advisory. They cannot override core rules, approval boundaries, validation semantics or protected paths.
+
+## 25. Migration / Legacy Transfer Boundary
+
+Legacy source is reference only.
+
+Legacy behavior may be:
+
+```text
+REUSE_SEMANTICS_ONLY
+ADAPT_TO_TARGET_ARCHITECTURE
+REWRITE_WITH_PARITY
+DO_NOT_IMPORT
+KEEP_AS_HISTORICAL_EVIDENCE
+UNKNOWN_BLOCKED
+```
+
+Direct copy from legacy is forbidden by default.
+
+Replacement requires parity and negative cases.
+
+Evidence from legacy does not approve transfer.
+
+## 26. Roadmap Boundary and Current Route
+
+Current route uses Stage numbering:
+
+```text
+Stage 1 — Source Pack Intake and Verification
+  ↓
+Stage 2 — Legacy Mapping and Feature Admission Alignment
+  ↓
+Stage 3 — Bootstrap Preflight
+  ↓
+Stage 4 — Governance, Contracts, State, Resolver and Approval Boundary
+  ↓
+Stage 5 — Validation, Evidence, Gate Matrix and False PASS Resistance
+  ↓
+Stage 6 — Spec-to-Verification Loop and Work Package Handoff
+  ↓
+Stage 7 — Recovery, Context, Lessons and Generated Navigation
+  ↓
+Stage 8 — Clean Template Export and Install/Update Boundary
+  ↓
+Stage 9 — Pilot / Optional Modules / Adapter Governance as authorized by roadmap
+```
+
+A4.x route is not current route.
+
+## 26.1 Repository Pointer Boundary
+
+Repository locations are defined in the unified repository pointer document.
+
+```text
+Адреса проектов.txt
+current: https://github.com/NMF13579/AOS-1/tree/dev
+legacy:  https://github.com/NMF13579/AgentOS/tree/dev
+```
+
+Repository pointers do not override architecture, skeleton, roadmap, Stage 1 gate or human approval.
+
+Branch `dev` is a moving reference. It may be used as a live working target, but it must not be treated as stable evidence unless a commit SHA or equivalent snapshot is recorded in a report.
+
+```yaml
+current_development_repository_boundary:
+  repository: "https://github.com/NMF13579/AOS-1"
+  branch: "dev"
+  branch_url: "https://github.com/NMF13579/AOS-1/tree/dev"
+  current_repo_is_target_location: true
+  current_repo_is_semantic_authority: false
+  active_source_pack_wins_on_conflict: true
+  commit_sha_required_for_evidence_snapshot: true
+  branch_head_as_completion_evidence_allowed: false
+  document_grants_approval: false
+  approval_authority: human_only
+```
+
+## 27. Stage 1 Gate Boundary
+
+Stage 1 проверяет source pack и готовность к дальнейшему переносу смысла из legacy.
+
+Stage 1 не выполняет:
+
+- перенос проекта;
+- перенос файлов;
+- реализацию фич;
+- deprecation execution;
+- merge/release;
+- lifecycle mutation;
+- запуск Stage 2.
+
+Stage 1 may only produce evidence and readiness reports.
+
+## 28. Command Boundary
+
+Команды AgentOS должны быть explicit, deterministic and scope-bound.
+
+Запрещены команды, которые:
+
+- скрыто меняют lifecycle;
+- обходят resolver;
+- создают approval;
+- делают commit/push без разрешения;
+- выполняют destructive operations без human authorization;
+- стартуют следующий stage автоматически.
+
+## 29. False PASS Resistance
+
+False PASS resistance requires:
+
+- result semantics;
+- machine-readable outputs where needed;
+- exit-code/result consistency;
+- negative fixtures;
+- evidence binding;
+- forbidden-claim checks;
+- separation of PASS, evidence, approval and lifecycle mutation.
+
+## 30. Functional Parity Boundary
+
+Functional parity means target behavior preserves or hardens important legacy behavior.
+
+Parity PASS requires:
+
+- legacy behavior identified;
+- target behavior identified;
+- owner layer defined;
+- positive cases checked;
+- negative cases verified;
+- fail-closed preserved or hardened;
+- approval boundary preserved;
+- lifecycle boundary preserved;
+- duplicate authority check passed;
+- evidence refs present.
+
+If parity is unknown, result blocks.
+
+## 31. Clean Source-of-Truth Hierarchy
+
+```text
+1. Архитектура.txt — meaning/safety
+2. Скелет архитектуры.txt — physical structure
+3. Roadmap.txt — implementation order
+4. Адреса проектов.txt — repository pointers:
+   - current development repository pointer
+   - previous legacy reference repository pointer
+5. 06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt — intake/admission gate
+6. 08_Future_Feature_Candidates_Parking_Lot.txt — future candidates only
+7. Reports — evidence only
+8. Generated/cache/index — derived only
+```
+
+## 32. What Must Not Be in Core
+
+Core must not include by default:
+
+- SaaS dashboard;
+- medical/clinical logic;
+- full vector DB RAG;
+- LangGraph/CrewAI as mandatory runtime;
+- full Mem0 as core memory authority;
+- multi-agent debate as approval mechanism;
+- self-heal business logic;
+- auto-approval;
+- auto-merge;
+- automatic canonical rule creation.
+
+## 33. Readiness Criteria
+
+Architecture is defined when:
+
+```yaml
+meaning_defined: true
+safety_invariants_defined: true
+authority_boundaries_defined: true
+source_of_truth_rules_defined: true
+approval_boundary_defined: true
+lifecycle_boundary_defined: true
+stage_1_gate_defined: true
+future_feature_boundary_defined: true
+roadmap_current_route_defined: true
+```
+
+Runtime is not ready until implementation, validation, evidence and human checkpoints exist.
+
+## 34. Final Boundary Rule
+
+Архитектура задаёт смысл и границы.
+
+Она не является runtime readiness, execution permission, PASS, evidence или approval.
+
+```yaml
+ARCHITECTURE_DEFINED: true
+RUNTIME_READY: false
+EXECUTION_READY: false
+VALIDATION_READY: false
+DOCUMENT_GRANTS_APPROVAL: false
+APPROVAL_AUTHORITY: human_only
+STAGE_1_EXECUTION_ALLOWED: false
+PROJECT_TRANSFER_ALLOWED: false
+TASK_1_1_BRIEF_PREPARATION_ALLOWED: true
+HUMAN_APPROVAL_REQUIRED: true
+```
+
+## 35. Final Status
+
+```text
+ARCHITECTURE_STATUS: ARCHITECTURE_DEFINED_SOURCE_PACK_SYNCED_REPAIRED_BOUNDARIES
+A4_0_GR_ROLE: architecture_version_label_only
+PRIMARY_ROADMAP_NUMBERING: Stage 1+
+LEGACY_STAGE_ALIASES: E0, A4.E0
+STAGE_1_GATE_PATH: 06_Stage_1_Source_Pack_Intake_and_Admission_Gate.txt
+REPOSITORY_POINTERS_PATH: Адреса проектов.txt
+FUTURE_FEATURE_CANDIDATES_PATH: 08_Future_Feature_Candidates_Parking_Lot.txt
+RUNTIME_READY: false
+EXECUTION_READY: false
+VALIDATION_READY: false
+APPROVAL_AUTHORITY: human_only
+DOCUMENT_GRANTS_APPROVAL: false
+PROJECT_TRANSFER_ALLOWED: false
+```
