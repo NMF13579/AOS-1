@@ -140,6 +140,28 @@ This alignment does not authorize execution, approval, or implementation.
 
 ## 6. Роли групп
 
+§6.1 Human Approval Marker and Approval Boundary
+
+Required structural elements:
+
+- Human Approval Marker
+- Approval Boundary Check
+- Approval Evidence Reference
+- Approval Pending State
+- Approval Rejection / Deferral State
+- Non-Simulation Rule
+- Fail-Closed Missing Approval Rule
+- Fail-Closed Ambiguous Approval Rule
+- Forbidden Approval Claim Check
+
+The approval boundary structure must ensure:
+
+- agents cannot create human approval markers;
+- agents cannot modify human approval markers;
+- agents cannot infer human approval from PASS, evidence, CI, readiness, or completion review;
+- missing approval evidence blocks mutation or lifecycle advancement;
+- ambiguous approval evidence blocks mutation or lifecycle advancement.
+
 | Group | Role | Boundary |
 |---|---|---|
 | `architecture/` | Инварианты, authority, boundary model | Не runtime |

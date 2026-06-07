@@ -188,6 +188,42 @@ Safety regression PASS ≠ approval.
 Human approval нельзя симулировать.
 ```
 
+§5.1 Human Approval Boundary
+
+Human Approval Boundary is a core governance invariant of AOS-1.
+
+AOS-1 must treat human approval as an explicit, traceable, human-originated decision.
+
+Agent-generated PASS is not approval.
+
+Agent-generated evidence is not approval.
+
+Agent-generated completion review is not approval.
+
+CI PASS is not approval.
+
+Readiness is not approval.
+
+An agent must not create, modify, simulate, infer, backfill, or silently replace human approval.
+
+If approval evidence is missing, ambiguous, contradictory, or agent-generated, the system must fail closed.
+
+A human approval marker must be outside ordinary agent self-claims and must reference a traceable human decision record.
+
+Machine-readable approval boundary metadata must use explicit fenced YAML block formatting, not 4-space indentation.
+
+```yaml
+human_approval_boundary:
+  cap_002_approval_granted: false
+  source_pack_mutation_authorized: false
+  architecture_txt_mutation_authorized: false
+  skeleton_txt_mutation_authorized: false
+  human_approval_required_before_mutation: true
+  agent_may_create_human_approval_marker: false
+  agent_may_modify_human_approval_marker: false
+  agent_may_infer_human_approval: false
+```
+
 Fail-closed:
 
 ```text
