@@ -1,0 +1,31 @@
+# Agent Autonomy Modes Report
+
+```yaml
+task_id: AOS-AUTONOMY-001
+policy_path: agentos/governance/agent-autonomy-modes.md
+report_path: reports/agent-autonomy-modes-report.md
+agent_preflight_skeleton_check_run: true
+agent_preflight_skeleton_check_method: deterministic_skeleton_directory_check
+agentos_directory_found_in_skeleton: true
+governance_directory_found_under_agentos: true
+path_allowed_by_skeleton_or_architecture: true
+agentos_governance_path_existed_before_task: true
+agentos_governance_path_created_by_task: false
+policy_created: true
+runtime_enforcement_created: false
+schema_updated: false
+template_updated: false
+validator_updated: false
+approval_created: false
+human_checkpoint_simulated: false
+lifecycle_mutation_created: false
+destructive_operations_performed: false
+agent_modified_skeleton: false
+agent_added_governance_to_skeleton: false
+dev_sandbox_mode_status: temporary_policy_defined_only
+default_mode: STRICT_GOVERNED_MODE
+unknown_mode_behavior: fail_closed
+may_use_dev_sandbox_mode_without_future_human_review: false
+maps_to_system_status: READY_FOR_HUMAN_REVIEW
+final_status: AUTONOMY_POLICY_DEFINED_PENDING_HUMAN_REVIEW
+```
