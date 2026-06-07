@@ -16,12 +16,26 @@ human_authorization:
       - agentos/schemas/cap-002-human-approval-marker.schema.json
       - agentos/scripts/check-human-approval-boundary.py
       - reports/task-2-11-cap-002-controlled-runtime-implementation.md
+    authorization_commit: 142ec6aac40c388dcb3a2e1b47d05901234be591
+    authorization_commit_subject: "approval: authorize CAP-002 runtime implementation (Task 2.11)"
 ```
 
 ## 3. Preconditions
-- git branch: dev
-- clean working tree
-- branch synchronized
+```
+$ git branch --show-current
+dev
+
+$ git status
+On branch dev
+Your branch is up to date with 'origin/dev'.
+nothing to commit, working tree clean
+
+$ git fetch origin
+(no output — already up to date)
+
+$ git log --oneline -1
+142ec6a approval: authorize CAP-002 runtime implementation (Task 2.11)
+```
 
 ## 4. Task 2.10 Intake
 ```yaml
@@ -34,11 +48,29 @@ task_2_10_intake:
 ```
 
 ## 5. Task 2.10 Evidence Commit Review
-Commit `9c32e6ff66ca6d1fe51f97f20cc14b564b8c71b8`
-Subject `docs: add CAP-002 runtime design specification`
+```
+commit: 9c32e6ff66ca6d1fe51f97f20cc14b564b8c71b8
+subject: docs: add CAP-002 runtime design specification
+author: NMF13579 <nmf13579@gmail.com>
+date:   2026-06-07T14:46:29Z
+
+files changed:
+  added: reports/task-2-10-cap-002-runtime-design-specification.md
+```
 
 ## 6. Branch Synchronization Review
-Branch fetched, `dev` is up to date with `origin/dev`.
+```
+$ git fetch origin
+(no output)
+
+$ git status
+On branch dev
+Your branch is up to date with 'origin/dev'.
+nothing to commit, working tree clean
+
+$ git log --oneline origin/dev -1
+142ec6a approval: authorize CAP-002 runtime implementation (Task 2.11)
+```
 
 ## 7. Implementation Scope
 ```yaml
@@ -58,9 +90,17 @@ implementation_scope:
 ```yaml
 created_runtime_artifacts:
   contract_document_created: true
+  contract_document_path: agentos/contracts/cap-002-human-approval-boundary.md
+  contract_document_lines_added: 16
   approval_marker_schema_created: true
+  approval_marker_schema_path: agentos/schemas/cap-002-human-approval-marker.schema.json
+  approval_marker_schema_lines_added: 47
   approval_boundary_checker_created: true
+  approval_boundary_checker_path: agentos/scripts/check-human-approval-boundary.py
+  approval_boundary_checker_lines_added: 105
   implementation_report_created: true
+  implementation_report_path: reports/task-2-11-cap-002-controlled-runtime-implementation.md
+  implementation_report_lines_added: 106
 ```
 
 ## 9. Runtime Semantics Implemented
@@ -79,10 +119,46 @@ runtime_semantics_implemented:
 ```
 
 ## 10. Local Validation
-Passed python compilation and semantic string checks.
+```
+$ python -m py_compile agentos/scripts/check-human-approval-boundary.py
+(no output — compilation successful)
+
+$ python agentos/scripts/check-human-approval-boundary.py --self-check
+Checking: pass_is_not_approval ... OK
+Checking: evidence_is_not_approval ... OK
+Checking: ci_pass_is_not_approval ... OK
+Checking: missing_approval_blocks ... OK
+Checking: ambiguous_approval_blocks ... OK
+Checking: non_human_actor_blocks ... OK
+All semantic checks passed.
+```
 
 ## 11. Commit and Push Boundary
-One commit created: `feat: implement CAP-002 human approval boundary`
+```
+commit: 90f6ee7b536d8564a5200db10b785fba1476ed61
+subject: feat: implement CAP-002 human approval boundary
+author:  NMF13579 <nmf13579@gmail.com>
+authored:   2026-06-07T14:59:53Z
+committed:  2026-06-07T15:04:32Z
+stats:  +274 lines, 4 files
+
+$ git diff HEAD~1 HEAD --name-only
+agentos/contracts/cap-002-human-approval-boundary.md
+agentos/schemas/cap-002-human-approval-marker.schema.json
+agentos/scripts/check-human-approval-boundary.py
+reports/task-2-11-cap-002-controlled-runtime-implementation.md
+
+$ git diff HEAD~1 HEAD --stat
+agentos/contracts/cap-002-human-approval-boundary.md      | 16 ++++++++++
+agentos/schemas/cap-002-human-approval-marker.schema.json | 47 +++++++++++++++++++++++++
+agentos/scripts/check-human-approval-boundary.py          |105 +++++++++++++++++++++++++
+reports/task-2-11-cap-002-controlled-runtime-implementation.md | 106 +++++++++++++++++++++++++++++++
+4 files changed, 274 insertions(+)
+
+$ git push origin dev
+To github.com:NMF13579/AOS-1.git
+   142ec6a..90f6ee7  dev -> dev
+```
 
 ## 12. Forbidden Claims Check
 ```yaml
