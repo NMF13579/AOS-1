@@ -154,6 +154,21 @@ Audit записывает события.
 Агент исполняет только разрешённый scope.
 ```
 
+```text
+Bootstrap route meaning:
+
+Bootstrap only points the agent to the governed entry path and the current authority surfaces.
+Registry only maps declared surfaces and does not grant approval, implementation permission or execution permission.
+Pipeline only describes bounded route options and does not start execution by itself.
+Resolver only selects one allowed next safe action and does not execute that action.
+
+Therefore canonical bootstrap and routing are navigation and authority-orientation only.
+They do not create approval.
+They do not start execution.
+They do not create implementation permission.
+They do not bypass human checkpoints.
+```
+
 ## 5. Базовые инварианты AgentOS
 
 Эти правила нельзя переопределить через pipeline, registry, context, SQLite, RAG, CI, generated files, reports, audit, agent output, prompt pack или SaaS UI.

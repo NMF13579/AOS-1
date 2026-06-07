@@ -123,6 +123,21 @@ agentos/
 
 Группы могут наполняться постепенно через task briefs. Создание отсутствующего файла или подпапки требует явного scope в задаче.
 
+```text
+Bootstrap / registry / pipeline alignment for canonical routing:
+
+- bootstrap/ is the future home of startup orientation and preflight entry guidance only.
+- registry/ is the future home of declared navigation maps only.
+- pipelines/ is the future home of bounded route descriptions only.
+
+These three groups may work together to orient the agent toward one safe next step, but this remains conceptual alignment only until separately implemented and approved.
+
+This alignment does not authorize physical skeleton materialization.
+This alignment does not authorize file creation.
+This alignment does not authorize directory creation.
+This alignment does not authorize execution, approval, or implementation.
+```
+
 ## 6. Роли групп
 
 | Group | Role | Boundary |
