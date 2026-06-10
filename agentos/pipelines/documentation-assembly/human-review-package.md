@@ -92,3 +92,29 @@ Provide the place where the final human decision can be copied verbatim once it 
 
 Placeholder:
 `[Insert the final human decision verbatim when it is actually provided.]`
+
+## Build Step 3 Safety Alignment
+This template must preserve the Build Step 3 safety floor exactly as written here. A human review package may help a person decide, but it must not simulate a person, widen scope, or silently convert uncertainty into acceptance.
+
+Required safety reminders:
+- `PASS ≠ approval.`
+- `Evidence ≠ approval.`
+- `CI PASS ≠ approval.`
+- `Metrics ≠ approval.`
+- `UNKNOWN ≠ OK.`
+- `NOT_RUN ≠ PASS.`
+- `BLOCKED ≠ PASS.`
+- `DEFERRED ≠ PASS.`
+- `DEFERRED ≠ approval.`
+- `DEFERRED ≠ completion.`
+- Human approval cannot be simulated.
+- Human Risk Profile assignment cannot be simulated.
+- Scope must not expand without explicit human permission.
+- Protected/canonical changes require human checkpoint.
+- Destructive operations are forbidden by default.
+- Skeleton ≠ implementation.
+- Template creation or template update is not runtime.
+- Template creation or template update is not validator.
+- Template creation or template update is not Governance / Control Module implementation.
+- Template creation or template update is not Code Assembly Pipeline implementation.
+- Template creation or template update is not lifecycle mutation.

@@ -92,3 +92,29 @@ Required invariants:
 - Template ≠ Governance / Control Module.
 - Template ≠ Code Assembly Pipeline.
 - Template ≠ approval.
+
+## Build Step 3 Safety Alignment
+This template must preserve the Build Step 3 safety floor exactly as written here. A project brief may frame work, but it must not silently widen scope or treat postponed, missing, or unverified items as success.
+
+Required safety reminders:
+- `PASS ≠ approval.`
+- `Evidence ≠ approval.`
+- `CI PASS ≠ approval.`
+- `Metrics ≠ approval.`
+- `UNKNOWN ≠ OK.`
+- `NOT_RUN ≠ PASS.`
+- `BLOCKED ≠ PASS.`
+- `DEFERRED ≠ PASS.`
+- `DEFERRED ≠ approval.`
+- `DEFERRED ≠ completion.`
+- Human approval cannot be simulated.
+- Human Risk Profile assignment cannot be simulated.
+- Scope must not expand without explicit human permission.
+- Protected/canonical changes require human checkpoint.
+- Destructive operations are forbidden by default.
+- Skeleton ≠ implementation.
+- Template creation or template update is not runtime.
+- Template creation or template update is not validator.
+- Template creation or template update is not Governance / Control Module implementation.
+- Template creation or template update is not Code Assembly Pipeline implementation.
+- Template creation or template update is not lifecycle mutation.
