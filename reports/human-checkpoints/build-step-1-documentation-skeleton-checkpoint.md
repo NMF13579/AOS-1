@@ -27,16 +27,16 @@
 **human_decision_copied_verbatim:** true
 **human_decision_copied_verbatim_field_type:** agent_self_attestation
 **independent_verbatim_accuracy_verified:** false
-**multi_message_human_decision_used:** false
-**human_decision_message_count:** 1
+**multi_message_human_decision_used:** true
+**human_decision_message_count:** 2
 **human_decision_messages_copied_in_chronological_order:** true
 **human_decision_messages_summarized_or_merged_by_agent:** false
-**human_decision_messages_internally_consistent:** NOT_APPLICABLE
+**human_decision_messages_internally_consistent:** true
 **agent_inferred_human_decision:** false
 **human_checkpoint_author_is_human:** true
-**task_1_1_authorization_trail_confirmed_by_human:** false
-**task_1_2_risk_profile_trail_confirmed_by_human:** false
-**authorization_trail_confirmed_from_human_decision_source:** false
+**task_1_1_authorization_trail_confirmed_by_human:** true
+**task_1_2_risk_profile_trail_confirmed_by_human:** true
+**authorization_trail_confirmed_from_human_decision_source:** explicit_human_message
 **agent_inferred_authorization_trail_confirmation:** false
 **skeleton_evidence_contradiction_check_performed:** true
 **skeleton_evidence_contradiction_found:** false
@@ -78,8 +78,8 @@
 **main_branch_touched:** false
 **main_branch_touched_field_type:** invariant_observed_at_end_of_task_1_3
 **unknowns_found:** false
-**blockers_found:** true
-**final_status:** DOCUMENTATION_SKELETON_CHECKPOINT_BLOCKED
+**blockers_found:** false
+**final_status:** DOCUMENTATION_SKELETON_CHECKPOINT_ACCEPTED
 
 ## 3. Upstream Reflection
 Observed from `reports/build-step-1-documentation-skeleton-report.md`:
@@ -163,12 +163,56 @@ Instructions:
 - After creating the checkpoint report: commit and push to dev immediately.
   Report the commit SHA for verification.
 
+Build Step 1 — Task 1.3 Human Checkpoint Decision (Retry)
+
+I am the human owner of this project.
+This message is a retry with the three missing trail fields added explicitly.
+
+All fields from the previous message remain in force.
+The following fields are now added verbatim:
+
+task_1_1_authorization_trail_confirmed_by_human: true
+task_1_2_risk_profile_trail_confirmed_by_human: true
+authorization_trail_confirmed_from_human_decision_source: explicit_human_message
+
+These values are provided explicitly by the human.
+The agent must not infer these values from any prior message.
+The agent must copy these values verbatim into the checkpoint report.
+
+All other fields from the previous checkpoint message remain unchanged:
+
+skeleton_reviewed_by_human: true
+skeleton_boundary_accepted_by_human: true
+implementation_absence_accepted_by_human: true
+may_mark_build_step_1_complete: true
+may_prepare_build_step_2_plan: true
+agent_may_continue_without_checkpoint: false
+human_decision_source: explicit_human_message
+human_decision_copied_verbatim: true
+agent_inferred_human_decision: false
+human_checkpoint_author_is_human: true
+
+Clarification (carry forward verbatim):
+may_prepare_build_step_2_plan: true does NOT authorize Build Step 2 execution.
+Build Step 2 execution requires separate explicit human authorization
+and a separately human-assigned Risk Profile.
+
+Known warning (carry forward into Task 2.0 intake verbatim):
+Task 1.3 reported missing exact fields in the Task 1.2 evidence report.
+Task 2.0 must record this warning in reports/build-step-2-intake-and-scope-lock.md
+and must not treat it as resolved unless missing fields are explicitly verified.
+
+Instructions:
+- Update reports/human-checkpoints/build-step-1-documentation-skeleton-checkpoint.md
+  with the complete decision including the three new fields above.
+- Do not modify any skeleton files.
+- Do not modify Task 1.1 or Task 1.2 reports.
+- Do not start Build Step 2.
+- Final status must be DOCUMENTATION_SKELETON_CHECKPOINT_ACCEPTED.
+- Commit and push to dev. Report the commit SHA.
+
 ## 6. Blockers
-- The required human confirmation fields below were not explicitly provided in the human decision message:
-  - `task_1_1_authorization_trail_confirmed_by_human`
-  - `task_1_2_risk_profile_trail_confirmed_by_human`
-  - `authorization_trail_confirmed_from_human_decision_source`
-- Task 1.3 must not infer or reinterpret those missing fields from surrounding text such as "I have reviewed".
+- No blockers remain after the human explicitly provided the three missing trail fields in the retry message.
 
 ## 7. Validation
 Task 1.3 created or edited only:
@@ -193,7 +237,7 @@ Task 1.3 did not create:
 - Build Step 2 artifact
 
 ## 8. Final Status
-**final_status:** DOCUMENTATION_SKELETON_CHECKPOINT_BLOCKED
+**final_status:** DOCUMENTATION_SKELETON_CHECKPOINT_ACCEPTED
 
 ## 9. Boundary Reminder
 - Checkpoint blocked ≠ approval.
