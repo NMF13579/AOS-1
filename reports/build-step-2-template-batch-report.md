@@ -55,7 +55,7 @@ reports_task_2_files_created: false
 
 unknowns_found: false
 blockers_found: false
-warnings_found: true
+warnings_found: false
 may_start_task_2_2: true
 ```
 
@@ -208,9 +208,17 @@ Blocker count: `0`
 ## 16. Warnings Register
 
 Warnings:
-- Task 2.0 carried forward the known warning that some exact required fields were missing from the Task 1.2 evidence report, and this batch does not treat that warning as resolved
+- none
 
-Warning count: `1`
+Resolved warning note:
+- `warning_id: task_1_2_evidence_report_field_completeness`
+- `warning_status: RESOLVED`
+- resolution basis: direct repository read of `reports/build-step-1-documentation-skeleton-evidence.md` confirmed the required fields from the Build Step 1 plan are present and correct
+- the three fields that triggered the earlier warning were treated as outside the canonical Build Step 1 plan scope
+- `resolution_verified_by: Perplexity direct repository read`
+- `commit: 5c257a03`
+
+Warning count: `0`
 
 ## 17. Final Status
 
@@ -222,7 +230,7 @@ Why this status was used:
 - all templates were filled beyond placeholder-only or `TBD`-only content
 - no template boundary violation was found
 - no blocker remains
-- one non-blocking carried warning remains recorded explicitly
+- no unresolved warning remains in this batch report
 
 Boundary reminder:
 - this report does not approve Build Step 2 completion

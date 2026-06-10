@@ -439,11 +439,18 @@ Blocker count: `0`
 ## 23. Warnings Register
 
 Warnings:
-- Task 1.3 carried forward a known warning that exact required fields were missing in the Task 1.2 evidence report; this intake records the warning and does not treat it as resolved because no explicit verification of those missing fields was provided here
 - repository state differs from the prompt’s expected pre-Build-Step-1 assumption because `agentos/pipelines/documentation-assembly/` already exists and `execution-package.md` is already present; this was treated as existing repository state only, not as Task 2.0 output and not as execution authorization
 - latest human unblock message was applied only to Build Step 2 task execution on branch `dev`; it was not expanded to merge, release, runtime, validator, Governance / Control Module, Code Assembly Pipeline, Build Step 3, or lifecycle mutation
 
-Warning count: `3`
+Resolved warning note:
+- `warning_id: task_1_2_evidence_report_field_completeness`
+- `warning_status: RESOLVED`
+- resolution basis: direct repository read of `reports/build-step-1-documentation-skeleton-evidence.md` confirmed the required fields from the Build Step 1 plan are present and correct
+- the three fields that triggered the earlier warning were treated as outside the canonical Build Step 1 plan scope
+- `resolution_verified_by: Perplexity direct repository read`
+- `commit: 5c257a03`
+
+Warning count: `2`
 
 ## 24. Readiness Decision for Task 2.1
 
