@@ -1,3 +1,12 @@
+> [!WARNING]
+> **LEGACY / REFERENCE ONLY**
+> This document is legacy/reference-only after authority sync.
+> Current project authority starts from `00_AOS_Core_Control.md`.
+> Roadmap and pipeline authority are in `01_AOS_Assembly_Pipelines_and_Build_Roadmap.md`.
+> Safety and governance authority are in `02_AOS_Governance_Control_Module_and_Safety_Rules.md`.
+> This document must not override the canonical AOS source pack.
+> This demotion is not approval, merge authorization, release authorization, or lifecycle mutation.
+
 # Future Feature Candidates Parking Lot
 
 ```yaml
