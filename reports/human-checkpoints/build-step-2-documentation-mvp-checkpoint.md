@@ -5,7 +5,7 @@
 ```yaml
 task_id: "2.3"
 task_name: "Build Step 2 Human Checkpoint Package"
-final_status: BUILD_STEP_2_CHECKPOINT_BLOCKED
+final_status: BUILD_STEP_2_CHECKPOINT_ACCEPTED
 
 task_2_0_report_exists: true
 task_2_0_final_status: BUILD_STEP_2_INTAKE_SCOPE_LOCK_READY
@@ -28,18 +28,18 @@ upstream_warnings_blocking: false
 all_required_templates_exist: true
 documentation_flow_evidence_review_passed: true
 
-documentation_mvp_reviewed_by_human: unknown
-documentation_mvp_accepted_by_human: unknown
-may_mark_build_step_2_complete: unknown
-may_prepare_build_step_3_plan: unknown
+documentation_mvp_reviewed_by_human: true
+documentation_mvp_accepted_by_human: true
+may_mark_build_step_2_complete: true
+may_prepare_build_step_3_plan: true
 build_step_3_requires_risk_profile_reclassification: true
 build_step_3_expected_minimum_risk_profile_if_governance_or_canonical_touched: HIGH_RISK_PROTECTED
 build_step_3_execution_authorized: false
 agent_may_continue_without_checkpoint: false
-human_decision_source: null
-human_decision_copied_verbatim: false
+human_decision_source: explicit_human_message
+human_decision_copied_verbatim: true
 agent_inferred_human_decision: false
-human_checkpoint_author_is_human: unknown
+human_checkpoint_author_is_human: true
 
 runtime_created: false
 validator_created: false
@@ -54,7 +54,7 @@ release_performed: false
 reports_task_2_files_created: false
 
 unknowns_found: false
-blockers_found: true
+blockers_found: false
 warnings_found: true
 
 build_step_2_completion_claimed_by_agent: false
@@ -183,10 +183,9 @@ Unknown count: `0`
 ## 10. Blockers Register
 
 Blockers:
-- explicit human decision fields required for Build Step 2 acceptance or rejection were not provided in this task input
-- without explicit human decision fields, Task 2.3 must not return an accepted or rejected checkpoint status
+- none
 
-Blocker count: `2`
+Blocker count: `0`
 
 ## 11. Non-Authorization Boundary Review
 
@@ -217,25 +216,30 @@ Questions for the human reviewer:
 
 ## 13. Human Decision Fields
 
-No explicit human checkpoint decision was provided in this task input, so these fields remain unfilled:
-- `documentation_mvp_reviewed_by_human: true_or_false`
-- `documentation_mvp_accepted_by_human: true_or_false`
-- `may_mark_build_step_2_complete: true_or_false`
-- `may_prepare_build_step_3_plan: true_or_false`
-- `build_step_3_requires_risk_profile_reclassification: true`
-- `build_step_3_expected_minimum_risk_profile_if_governance_or_canonical_touched: HIGH_RISK_PROTECTED`
-- `build_step_3_execution_authorized: false`
-- `agent_may_continue_without_checkpoint: false`
-- `human_decision_source: explicit_human_message OR signed_human_checkpoint OR null`
-- `human_decision_copied_verbatim: true_or_false`
-- `agent_inferred_human_decision: false`
-- `human_checkpoint_author_is_human: true_or_false`
+Human checkpoint decision recorded verbatim:
 
-Current result:
-- `human_decision_source: null`
-- `human_decision_copied_verbatim: false`
-- `agent_inferred_human_decision: false`
-- `human_checkpoint_author_is_human: unknown`
+`documentation_mvp_reviewed_by_human: true`
+
+`documentation_mvp_accepted_by_human: true`
+
+`may_mark_build_step_2_complete: true`
+
+`may_prepare_build_step_3_plan: true`
+
+`build_step_3_execution_authorized: false`
+
+`agent_may_continue_without_checkpoint: false`
+
+`human_decision_source: explicit_human_message`
+
+`human_decision_copied_verbatim: true`
+
+`agent_inferred_human_decision: false`
+
+`human_checkpoint_author_is_human: true`
+
+Clarification recorded verbatim:
+- `may_prepare_build_step_3_plan: true does NOT authorize Build Step 3 execution. Build Step 3 execution requires separate explicit human authorization and a separately human-assigned Risk Profile.`
 
 ## 14. Build Step 3 Boundary
 
@@ -249,6 +253,7 @@ Build Step 3 boundary:
 Current status:
 - `may_start_build_step_3_execution: false`
 - `build_step_3_execution_authorized: false`
+- `may_prepare_build_step_3_plan: true` is recorded as planning permission only
 
 ## 15. Risk Profile Reclassification Note
 
@@ -263,16 +268,18 @@ Boundary:
 ## 16. Final Status
 
 Final status:
-- `BUILD_STEP_2_CHECKPOINT_BLOCKED`
+- `BUILD_STEP_2_CHECKPOINT_ACCEPTED`
 
-Why blocked:
+Why accepted:
 - all upstream gates passed
 - all upstream statuses were copied verbatim
 - carried warnings are non-blocking
-- but required human checkpoint decision fields are still missing
-- therefore the package may be prepared, but acceptance or rejection cannot be inferred
+- required human checkpoint decision fields were provided explicitly by the human
+- Build Step 2 was reviewed and accepted by the human
+- Build Step 2 may be marked complete
+- Build Step 3 execution remains unauthorized
 
 Boundary reminder:
 - this package is not approval by itself
-- this package does not claim Build Step 2 completion
+- this package records explicit human acceptance and explicit permission to mark Build Step 2 complete
 - this package does not start Build Step 3
