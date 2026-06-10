@@ -442,6 +442,19 @@ Warnings:
 - repository state differs from the prompt’s expected pre-Build-Step-1 assumption because `agentos/pipelines/documentation-assembly/` already exists and `execution-package.md` is already present; this was treated as existing repository state only, not as Task 2.0 output and not as execution authorization
 - latest human unblock message was applied only to Build Step 2 task execution on branch `dev`; it was not expanded to merge, release, runtime, validator, Governance / Control Module, Code Assembly Pipeline, Build Step 3, or lifecycle mutation
 
+Structured warnings:
+```yaml
+warning_register:
+  - warning_id: preexisting_documentation_assembly_path
+    warning_status: ACCEPTED_NON_BLOCKING
+    warning_blocking: false
+    warning_scope: repository_state_only
+  - warning_id: human_unblock_scope_limited_to_build_step_2
+    warning_status: ACCEPTED_NON_BLOCKING
+    warning_blocking: false
+    warning_scope: build_step_2_execution_only
+```
+
 Resolved warning note:
 - `warning_id: task_1_2_evidence_report_field_completeness`
 - `warning_status: RESOLVED`

@@ -39,7 +39,10 @@ execution_report_to_evidence_report_flow_valid: true
 evidence_report_to_human_review_package_flow_valid: true
 
 execution_package_acknowledged_but_deferred: true
-execution_package_template_created: false
+execution_package_template_exists: true
+execution_package_template_created_by_task_2_2: false
+execution_package_template_preexisting_from_build_step_1: true
+execution_package_status: ACKNOWLEDGED_SKELETON_DEFERRED
 template_scope_md_created: false
 
 template_section_completeness_pass: true

@@ -142,21 +142,8 @@ The later human review should answer:
 15. Should Build Step 3 be rejected?
 16. Should Build Step 3 remain blocked by human decision?
 
-## 15. Human Decision Placeholder
-```yaml
-human_decision_placeholder:
-  minimal_safety_floor_reviewed_by_human: HUMAN_INPUT_REQUIRED
-  minimal_safety_floor_accepted_by_human: HUMAN_INPUT_REQUIRED
-  warnings_accepted_by_human: HUMAN_INPUT_REQUIRED_or_NOT_APPLICABLE
-  may_mark_build_step_3_complete: HUMAN_INPUT_REQUIRED
-  may_prepare_build_step_4_plan: HUMAN_INPUT_REQUIRED
-
-  human_decision_status: HUMAN_INPUT_REQUIRED
-
-  human_decision_copied_verbatim: false
-  human_checkpoint_author_is_human: unknown
-  human_checkpoint_author_evidence: unknown
-```
+## 15. Human Decision Record
+The earlier placeholder state was superseded by a separately recorded human decision and is kept here only as historical context.
 
 Recorded human decision from exact user message:
 
@@ -173,7 +160,7 @@ human_decision:
 ```
 
 ## 16. Human Decision Status Boundary
-Human-only statuses are not assigned in this package:
+Human-only statuses are not assigned by the agent in this package:
 - `BUILD_STEP_3_CHECKPOINT_ACCEPTED`
 - `BUILD_STEP_3_CHECKPOINT_ACCEPTED_BUILD_STEP_4_PLAN_DEFERRED`
 - `BUILD_STEP_3_CHECKPOINT_REJECTED`
@@ -199,10 +186,10 @@ This package documents, but does not apply, the later completion mapping:
 - decision unknown or unverifiable -> `UNKNOWN_BLOCKED`
 
 ## 19. Build Step 4 Planning Boundary
-Build Step 4 planning remains outside Task 3.5 decision authority.
+Build Step 4 planning is recorded from the accepted human decision, but this package itself does not author it.
 
 Required planning boundary:
-- `may_prepare_build_step_4_plan: human_decision_required`
+- `may_prepare_build_step_4_plan: true`
 - `build_step_4_planning_started: false`
 - `build_step_4_task_brief_created: false`
 - `build_step_4_artifact_created: false`
@@ -213,8 +200,7 @@ Build Step 4 execution remains fixed as not authorized in Task 3.5.
 ## 21. Human Decision Update Protocol Parking Lot
 Task 3.5 creates the agent-prepared package only. It does not define how a later human decision is inserted, signed, copied, or finalized.
 
-Any later human decision recording requires:
-- separate explicit human-approved protocol or task
+A later human decision has already been recorded through a separate step and is reflected in this package.
 
 ## 22. Machine-Readable Package Summary
 ```yaml
@@ -283,7 +269,7 @@ initial_human_decision_state:
   human_checkpoint_author_evidence: "exact_user_message"
 
 build_step_4_planning_boundary:
-  may_prepare_build_step_4_plan: human_decision_required
+  may_prepare_build_step_4_plan: true
   build_step_4_planning_started: false
   build_step_4_task_brief_created: false
   build_step_4_artifact_created: false

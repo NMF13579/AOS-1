@@ -173,6 +173,19 @@ Carry-forward result:
 - warnings were not downgraded
 - warnings were not converted into approval
 
+Structured warning register:
+```yaml
+warning_register:
+  - warning_id: preexisting_documentation_assembly_path
+    warning_status: ACCEPTED_NON_BLOCKING
+    warning_blocking: false
+    warning_scope: repository_state_only
+  - warning_id: human_unblock_scope_limited_to_build_step_2
+    warning_status: ACCEPTED_NON_BLOCKING
+    warning_blocking: false
+    warning_scope: build_step_2_execution_only
+```
+
 ## 9. Unknowns Register
 
 Unknowns:
