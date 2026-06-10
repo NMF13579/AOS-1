@@ -15,6 +15,9 @@
 
 При выполнении любых задач агент обязан соблюдать:
 
+- Agent execution must follow the canonical AOS source pack.
+- Old Stage/source-pack execution guidance is reference-only.
+- Runtime Enforcement Planning ≠ runtime implementation.
 - PASS ≠ approval.
 - Evidence ≠ approval.
 - CI PASS ≠ approval.
