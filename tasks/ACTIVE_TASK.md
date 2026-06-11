@@ -1,23 +1,24 @@
 # ACTIVE TASK
 
 ```yaml
-active_task_id: ""
-active_task_path: ""
-status: NOT_ACTIVE
-execution_allowed: false
-human_authorized_current_task_only: false
+active_task_id: "4.0"
+active_task_path: "tasks/backlog/task-4.0-build-step-4-intake-and-scope-lock.md"
+status: ACTIVE
+execution_allowed: true
+human_authorized_current_task_only: true
 agent_may_execute_backlog: false
 approval_created: false
 next_task_started: false
+authorization_reference: "HDP-BS4-RERUN-001"
 ```
 
 ## Execution Authority
 
-No task is currently active.
+Task 4.0 is the only active task.
 
 Agent may read `tasks/backlog/` as context only.
 
-Agent must not execute any backlog task.
+Agent may execute only `tasks/backlog/task-4.0-build-step-4-intake-and-scope-lock.md`.
 
 Agent must not auto-select a task.
 
