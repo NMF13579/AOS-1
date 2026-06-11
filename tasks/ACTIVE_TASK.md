@@ -1,31 +1,27 @@
 # ACTIVE TASK
 
 ```yaml
-active_task_id: "4.1-remediation"
-active_task_path: "agentos/pipelines/code-assembly/code-assembly-pipeline-contract.md"
-status: ACTIVE
-execution_allowed: true
-human_authorized_current_task_only: true
+active_task_id: "none"
+active_task_path: "none"
+status: CLOSED_BUILD_STEP_4
+execution_allowed: false
+human_authorized_current_task_only: false
 agent_may_execute_backlog: false
 approval_created: false
 next_task_started: false
-authorization_reference: "HDP-BS4-TASK41-REMEDIATION-001"
+closed_by: "HDP-BS4-CLOSURE-001"
+build_step_5_authorized: false
+next_task_requires_separate_human_decision: true
 ```
 
 ## Execution Authority
 
-Task 4.1 remediation is the only active task.
+Build Step 4 is closed by human decision `HDP-BS4-CLOSURE-001`.
 
-Agent may read required sources and prior reports as context only.
+There is no active task.
 
-Agent may execute only the authorized in-place remediation of `agentos/pipelines/code-assembly/code-assembly-pipeline-contract.md`.
+Agent must not auto-select a next task.
 
-Agent must not auto-select a task.
+Agent must not auto-start Build Step 5.
 
-Agent must not auto-proceed to the next task.
-
-Agent must not create approval.
-
-Agent must not simulate human checkpoint.
-
-Agent may create only the authorized remediation report at `reports/task-4.1-remediation-report.md`.
+Any next task requires a separate human decision.
