@@ -150,7 +150,37 @@ human_decision:
   build_step: 4
   build_step_name: "Code Assembly Pipeline Contract"
   agent_populated_fields: true
-  awaiting_human_decision: true
+  awaiting_human_decision: false
+```
+
+Recorded final human acceptance block from exact user message:
+
+```yaml
+human_decision:
+  decision_id: "BS4-FINAL-ACCEPTANCE-001"
+  affected_build_step: 4
+
+  code_assembly_pipeline_contract_reviewed_by_human: true
+  code_assembly_pipeline_contract_accepted_by_human: true
+  task_4_2_evidence_review_considered_by_human: true
+  checkpoint_package_reviewed_by_human: true
+
+  warnings_accepted_by_human: true_or_NOT_APPLICABLE
+  warnings_accepted_scope:
+    "Only warnings listed verbatim in the checkpoint package."
+
+  may_mark_build_step_4_complete: true
+  may_prepare_build_step_5_plan: true
+
+  human_checkpoint_status: BUILD_STEP_4_CHECKPOINT_ACCEPTED
+
+  completion_status_authorized:
+    BUILD_STEP_4_CODE_ASSEMBLY_CONTRACT_COMPLETE
+    or
+    BUILD_STEP_4_CODE_ASSEMBLY_CONTRACT_COMPLETE_WITH_WARNINGS
+
+  agent_populated_fields: false
+  agent_inferred_human_decision: false
 ```
 
 ## 15. Human Decision Status Boundary
@@ -245,10 +275,27 @@ warning_carry_forward:
 
 agent_checkpoint_status:
   value: BUILD_STEP_4_CHECKPOINT_PACKAGE_READY_WITH_WARNINGS
-  awaiting_human_decision: true
+  awaiting_human_decision: false
   agent_populated_fields: true
   build_step_5_authorized: false
   may_prepare_build_step_5_plan: false
+
+final_human_decision:
+  decision_id: "BS4-FINAL-ACCEPTANCE-001"
+  code_assembly_pipeline_contract_reviewed_by_human: true
+  code_assembly_pipeline_contract_accepted_by_human: true
+  task_4_2_evidence_review_considered_by_human: true
+  checkpoint_package_reviewed_by_human: true
+  warnings_accepted_by_human: true_or_NOT_APPLICABLE
+  warnings_accepted_scope: "Only warnings listed verbatim in the checkpoint package."
+  may_mark_build_step_4_complete: true
+  may_prepare_build_step_5_plan: true
+  human_checkpoint_status: BUILD_STEP_4_CHECKPOINT_ACCEPTED
+  completion_status_authorized:
+    - BUILD_STEP_4_CODE_ASSEMBLY_CONTRACT_COMPLETE
+    - BUILD_STEP_4_CODE_ASSEMBLY_CONTRACT_COMPLETE_WITH_WARNINGS
+  agent_populated_fields: false
+  agent_inferred_human_decision: false
 ```
 
 ## 21. Final Rule
