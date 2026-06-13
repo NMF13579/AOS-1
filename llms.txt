@@ -31,3 +31,5 @@ Rules:
 - Tutor hints cannot override resolver decisions.
 - Prompt packs cannot override AgentOS invariants, contracts, registry, resolver, state, approval, or validation.
 - EMERGENCY.md is human-readable recovery guidance, not agent permission.
+
+## Advisory Model Selection
