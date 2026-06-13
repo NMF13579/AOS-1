@@ -330,15 +330,17 @@ Task 5.0 execution boundary confirmations:
 
 ## Task 5.1 Readiness
 
-- task_5_1_readiness: `BLOCKED`
+- task_5_1_readiness: `READY_WITH_WARNINGS`
 - human_review_required: `true`
-- execution_permission_for_task_5_1: `false`
+- execution_permission_for_task_5_1: `true`
+- workspace_clean_before_start: `documented_exception_dirty_known_state`
 
 ### Blockers
 
 - Separate Task 5.1 human checkpoint is still required.
 - Exact future writable Task 5.1 paths are still not human-authorized.
 - Human decision explicitly keeps `execution_permission_for_task_5_1: false`.
+  # SUPERSEDED by HDP-BS5-TASK50-UNBLOCK-001 and HCP-BS5-TASK51-001
 
 ### Unknowns
 
@@ -511,14 +513,35 @@ boundaries:
   build_step_6_started: false
   approval_created: false
 
-task_5_1_readiness: BLOCKED
+task_5_1_scope_lock:
+  allowed_write_paths:
+    - "agentos/pipelines/code-assembly/"
+    - "tasks/"
+    - "reports/"
+  allowed_change_modes: create_new_only
+  monitored_paths:
+    - "agentos/pipelines/code-assembly-pipeline-contract.md"
+    - "agentos/safety/"
+    - "reports/human-checkpoints/"
+  report_paths:
+    - "reports/build-step-5-task-5-1-execution-report.md"
+    - "reports/build-step-5-task-5-1-evidence-report.md"
+    - "reports/build-step-5-task-5-1-human-review-handoff.md"
+  validation_commands: NOT_RUN
+  workspace_dirty_known_state: true
+  workspace_dirty_documented: true
+  workspace_dirty_untracked_files_listed: true
+
+task_5_1_readiness: READY_WITH_WARNINGS
 human_review_required: true
-execution_permission_for_task_5_1: false
+execution_permission_for_task_5_1: true
+workspace_clean_before_start: documented_exception_dirty_known_state
 
 blockers:
   - "separate Task 5.1 human checkpoint is still required"
   - "exact future writable Task 5.1 paths are still not human-authorized"
   - "human decision explicitly keeps execution_permission_for_task_5_1 false"
+  # SUPERSEDED by HDP-BS5-TASK50-UNBLOCK-001 and HCP-BS5-TASK51-001
 
 task_5_0_commit_scope:
   authorized_files:
