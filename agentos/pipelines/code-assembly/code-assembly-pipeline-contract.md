@@ -30,6 +30,7 @@ Authority order for this contract:
 - `02_AOS_Governance_Control_Module_and_Safety_Rules.md`
 - `agentos/safety/minimal-safety-floor.md`
 - `agentos/safety/failure-semantics.md`
+Governance rules: see `agentos/pipelines/governance-rules.md`
 
 If roadmap wording and safety wording conflict, safety wording wins unless `00_AOS_Core_Control.md` explicitly says otherwise.
 
