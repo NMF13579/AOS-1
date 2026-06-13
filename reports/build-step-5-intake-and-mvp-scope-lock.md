@@ -520,7 +520,7 @@ task_5_1_scope_lock:
     - "reports/"
   allowed_change_modes: create_new_only
   monitored_paths:
-    - "agentos/pipelines/code-assembly-pipeline-contract.md"
+    - "agentos/pipelines/code-assembly/code-assembly-pipeline-contract.md"
     - "agentos/safety/"
     - "reports/human-checkpoints/"
   report_paths:
