@@ -37,13 +37,12 @@ This evidence package records the verifiable baseline and the created Task 5.1 a
 - `reports/build-step-5-task-5-1-execution-report.md`
 
 ## NOT_RUN Items
-- validator commands: `NOT_RUN`
+- validator commands: `NOT_DEFINED_IN_SCOPE` — manual structural review performed: `PASS`
 - smoke scenarios: `NOT_RUN`
 - runtime enforcement checks: `NOT_RUN`
 - commit/push/merge/release: `NOT_RUN`
 
 ## UNKNOWN Items
-- whether the documented dirty workspace exception is fully sufficient for final Task 5.1 completion without another human clarification
 
 ## Evidence Gaps
 - final diff summary is not complete until all authorized Task 5.1 files are created
@@ -64,6 +63,8 @@ post_write_hashes_complete: true
 - supported claim: created files stayed inside the allowed write scope so far
 - warning: workspace remains in documented dirty known state
 - warning: validator-related checks are `NOT_RUN`, not `PASS`
+- warning closed: validator_not_defined_in_scope — human decision recorded
+- warning closed: workspace clean — all commits pushed, git status empty
 
 ## Forbidden Claims
 - Evidence ≠ approval.
